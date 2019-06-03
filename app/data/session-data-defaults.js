@@ -17,8 +17,9 @@ Example usage:
 
 */
 
+const Generate = require('./generate')
+
 module.exports = {
-
-  // Insert values here
-
+	// Insert values here
+	lastName: Generate.lastName()
 }

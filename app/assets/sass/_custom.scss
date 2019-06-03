@@ -1,0 +1,17 @@
+// Fix for background when footer is not sticky
+html {
+	background-color: #dee0e2;
+}
+
+// Widen pages for caseworking
+[class*='__container'],
+.govuk-width-container {
+	max-width: 1240px;
+}
+
+// Ensure no paragraph is too long to read in widened views
+.govuk-body-m,
+.govuk-body,
+p {
+	max-width: 34em;
+}

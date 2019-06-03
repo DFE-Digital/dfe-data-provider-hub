@@ -1,44 +1,39 @@
 
-{% extends "layout.html" %}
+{% extends "layout-data-dfe.html" %}
 
 {% block pageTitle %}
-  GOV.UK Prototype Kit
+  Send data to DfE
 {% endblock %}
 
 {% block content %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">
-        The GOV.UK Prototype Kit
-        <span class="govuk-caption-xl">{{releaseVersion}}</span>
-      </h1>{{releaseVersion | log }}
-      <p>
-        This kit lets you rapidly create HTML prototypes of GOV.UK services.
-      </p>
+    <div class="govuk-grid-row govuk-!-padding-bottom-8">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+            Send data to DfE
+            <span class="govuk-caption-xl">GOV.UK Prototype Kit {{releaseVersion}}</span>
+            </h1>{{releaseVersion | log }}
 
-      <p>
-        It contains all you need to prototype anything from simple static pages to complex, data-driven transactions.
-      </p>
+            <p>
+                The content of this service is to be made available to authorised Department for Education employees and contractors only. This is a prototype, do not use this version to submit real school data. 
+            </p>
 
-      <h2 class="govuk-heading-m">About this page</h2>
-
-      <p>We recommend you add links to your prototype to this page, rather than delete it.
-        You'll find this page in the kit at '/app/views/index.html'.</p>
-
-      <p>You can change the service name by editing the file '/app/config.js'.</p>
-
-      <h2 class="govuk-heading-m">Examples and documentation</h2>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li><a href="/docs/tutorials-and-examples">Example pages and documentation</a></li>
-        <li>
-          <a href="https://design-system.service.gov.uk">
-            GOV.UK Design System
-          </a>
-        </li>
-      </ul>
+        </div>
     </div>
-</div>
+
+    <div class="govuk-grid-row govuk-!-padding-bottom-8">
+        <div class="govuk-grid-column-one-third">
+            <h3 class="govuk-heading-m">Design</h3>
+            <ul class="govuk-list">
+                <li><a class="govuk-link" href="iterations/current/options.html">Current iteration</a></li>
+            </ul>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <h3 class="govuk-heading-m">User research</h3>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <h3 class="govuk-heading-m">Development</h3>
+        </div>
+    </div>
 
 {% endblock %}
