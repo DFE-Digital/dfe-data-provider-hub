@@ -21,5 +21,5 @@ const Generate = require('./generate')
 
 module.exports = {
 	// Insert values here
-	lastName: Generate.lastName()
+	school: Generate.schools(1)[0]
 }
