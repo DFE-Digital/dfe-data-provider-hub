@@ -21,5 +21,5 @@ const Generate = require('./generate')
 
 module.exports = {
 	// Insert values here
-	school: Generate.schools(1)[0]
+	schools: Generate.schools(142)
 }

@@ -1,13 +1,16 @@
-module.exports = function (env) {
-  /**
-   * Instantiate object used to store the methods registered as a
-   * 'filter' (of the same name) within nunjucks. You can override
-   * gov.uk core filters by creating filter methods of the same name.
-   * @type {Object}
-   */
-  var filters = {}
+const generate = require('./data/generate')
 
-  /* ------------------------------------------------------------------
+module.exports = function(env) {
+	/**
+	 * Instantiate object used to store the methods registered as a
+	 * 'filter' (of the same name) within nunjucks. You can override
+	 * gov.uk core filters by creating filter methods of the same name.
+	 * @type {Object}
+	 */
+
+	var filters = {}
+
+	/* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
     @example:
 
@@ -38,8 +41,212 @@ module.exports = function (env) {
 
   ------------------------------------------------------------------ */
 
-  /* ------------------------------------------------------------------
+	const separateThousandsWithComma = input => {
+		let amount = Math.round(Number(input) * 100) / 100
+		if (amount % 1 !== 0) {
+			amount = amount.toFixed(2)
+		}
+		return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+	}
+
+	const toFriendlyNumber = input => {
+		if (input == 0 || input == '0' || !input) {
+			return 'None'
+		} else {
+			return separateThousandsWithComma(input)
+		}
+	}
+
+	filters.currency = (number, prefix) => {
+		if (!prefix) {
+			prefix = '£'
+		}
+		return prefix + separateThousandsWithComma(number)
+	}
+
+	filters.friendlyNumber = input => {
+		return toFriendlyNumber(input)
+	}
+
+	// Render numeric date as month string e.g. '04' becomes 'April'
+
+	const numberToMonthString = input => {
+		const months = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December'
+		]
+		return months[Number(input)]
+	}
+
+	filters.formatDate = str => {
+		const date = new Date(str)
+		return (
+			date.getDate() +
+			' ' +
+			numberToMonthString(date.getMonth()) +
+			' ' +
+			date.getFullYear() +
+			' at ' +
+			('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
+			':' +
+			('0' + date.getMinutes()).slice(-2)
+		)
+	}
+
+	filters.formatColumnDate = str => {
+		const date = new Date(str)
+		return (
+			('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
+			':' +
+			('0' + date.getMinutes()).slice(-2) +
+			' on ' +
+			date.getDate() +
+			' ' +
+			numberToMonthString(date.getMonth()) +
+			' ' +
+			date.getFullYear()
+		)
+	}
+
+	filters.friendlyDate = (str, nowStr) => {
+		const date = new Date(str)
+		const now = new Date(nowStr)
+		const secondsPassed = (now - date) / 1000
+		if (secondsPassed < 15) {
+			return 'just now'
+		} else if (secondsPassed < 60) {
+			return 'less than a minute ago'
+		} else if (secondsPassed < 75) {
+			return 'a minute ago'
+		} else if (secondsPassed < 60 * 4) {
+			return 'a few minutes ago'
+		} else if (secondsPassed < 60 * 59) {
+			return Math.floor(secondsPassed / 60) + ' minutes ago'
+		} else if (
+			secondsPassed < 60 * 60 * 24 &&
+			now.getDate() === date.getDate()
+		) {
+			return (
+				'today at ' +
+				('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
+				':' +
+				('0' + date.getMinutes()).slice(-2)
+			)
+		} else {
+			return (
+				('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
+				':' +
+				('0' + date.getMinutes()).slice(-2) +
+				' ' +
+				date.getDate() +
+				' ' +
+				numberToMonthString(date.getMonth()) +
+				' ' +
+				date.getFullYear()
+			)
+		}
+	}
+
+	filters.orElse = (str, fallback) => {
+		if (!str || str == '') {
+			return fallback
+		}
+		return str
+	}
+
+	filters.month = number => numberToMonthString(number - 1)
+
+	filters.lowerCase = str => str.toLowerCase()
+
+	filters.upperCase = str => str.toUpperCase()
+
+	filters.titleCase = str => {
+		return str.replace(/\w\S*/g, txt => {
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+		})
+	}
+
+	filters.sentenceCase = str => {
+		return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase()
+	}
+
+	filters.numbersOnly = str =>
+		str
+			.toString()
+			.match(/\d+/g)
+			.join('')
+
+	filters.urlSafe = str => encodeURIComponent(str)
+
+	filters.contains = (test, str) => {
+		if (test) {
+			return test.includes(str)
+		} else {
+			return false
+		}
+	}
+
+	filters.arrayContains = (arrayAsString, str) => {
+		if (arrayAsString) {
+			const array = arrayAsString + ''.split(',')
+			return array.includes(str)
+		} else {
+			return false
+		}
+	}
+
+	filters.stringSum = arrayOfStrings => {
+		var output = 0
+		arrayOfStrings.forEach(str => {
+			parseFloat(str) ? (output += parseFloat(str)) : false
+		})
+		return toFriendlyNumber(output)
+	}
+
+	filters.debug = obj => {
+		return JSON.stringify(obj)
+	}
+
+	filters.getById = (array, str) => {
+		return array.find(obj => {
+			return obj.id.toString() === str
+		})
+	}
+
+	filters.getByCode = (array, str) => {
+		if (Array.isArray(array)) {
+			return array.find(obj => {
+				return obj.code.toString() === str
+			})
+		} else {
+			return nil
+		}
+	}
+
+	filters.randomSchool = () => {
+		return generate.schoolName()
+	}
+
+	filters.randomName = () => {
+		return generate.name()
+	}
+
+	filters.phoneNumber = () => {
+		return generate.phoneNumber()
+	}
+
+	/* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
-  return filters
+	return filters
 }
