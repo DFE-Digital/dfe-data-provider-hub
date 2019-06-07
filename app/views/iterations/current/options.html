@@ -4,6 +4,8 @@
     Configure prototype
 {% endblock %}
 
+{% set school = data.schools[0] %}
+
 {% block content %}
 
 <div class="govuk-grid-row">
@@ -15,14 +17,14 @@
                 href: 'javascript:history.back()'
             }) }}
 
-            <form action="/load-school" action="post">
+            <form action="/school/modify" method="post">
 
                 <h1 class="govuk-heading-xl">Configure prototype</h1>
 
                 {{ govukInput({
                     id: 'set-school-name',
                     name: 'set-school-name',
-                    value: data['set-school-name'] if data['set-school-name'] else '' | randomSchool,
+                    value: school.name,
                     label: {
                         text: 'School name'
                     },
@@ -32,16 +34,40 @@
                 {{ govukInput({
                     id: 'set-school-user-name',
                     name: 'set-school-user-name',
-                    value: data['set-school-user-name'] if data['set-school-user-name'] else '' | randomName,
+                    value: school.provider,
                     label: {
                         text: 'School data provider’s name'
                     },
                     classes: 'govuk-input--width-20'
                 }) }}
 
-                <input type="hidden" name="set-user-type" value="school">
+                {{ govukInput({
+                    id: 'set-number-of-queries',
+                    name: 'set-number-of-queries',
+                    value: school.noOfQueries if school.noOfQueries else '0',
+                    type: 'number',
+                    label: {
+                        text: 'Number of queries'
+                    },
+                    classes: 'govuk-input--width-5'
+                }) }}
 
-                <input type="hidden" name="set-use-defined-queries" value="true">
+                {{ govukInput({
+                    id: 'set-number-of-errors',
+                    name: 'set-number-of-errors',
+                    value: school.noOfErrors if school.noOfErrors else '0',
+                    type: 'number',
+                    label: {
+                        text: 'Number of errors'
+                    },
+                    classes: 'govuk-input--width-5'
+                }) }}
+
+                <input type="hidden" name="user-type" value="school">
+
+                <input type="hidden" name="selected-school" value="{{ school.id }}">
+
+                <input type="hidden" name="success-page" value="#root#/school/issues">
 
                 {{ govukButton({
                     html: 'Save and continue'

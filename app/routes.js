@@ -20,4 +20,7 @@ router.all('*', (req, _, next) => {
 	next()
 })
 
+const schoolModifierRoutes = require('./routes/modify-school')
+router.use('/school', schoolModifierRoutes)
+
 module.exports = router

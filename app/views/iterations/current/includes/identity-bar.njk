@@ -1,0 +1,17 @@
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-identity-bar/macro.njk' import hmctsIdentityBar %}
+{% macro schoolIdentityBar(params) %}
+{% if params.school == null %}
+<script>
+    window.location.href = '/error?error-message=Entered a view where a school was required but no school was selected in session'
+</script>
+{% endif %}
+{{ hmctsIdentityBar({
+    title: { html: '<b>' + params.school.name + '</b> ' + params.school.LAESTAB },
+    menus: [{
+        items: [{
+            text: 'Send responses'
+        }]
+    }] if params.isReady
+}) }} 
+{% endmacro %}

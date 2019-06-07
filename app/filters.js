@@ -31,11 +31,6 @@ module.exports = function(env) {
       return (tone == 'formal' ? 'Greetings' : 'Hi') + ' ' + name + '!'
     }
 
-    Which would be used like this:
-
-    {{ 'Joel' | sayHi('formal') }} => 'Greetings Joel!'
-    {{ 'Gemma' | sayHi }} => 'Hi Gemma!'
-
     For more on filters and how to write them see the Nunjucks
     documentation.
 
@@ -221,6 +216,82 @@ module.exports = function(env) {
 		return array.find(obj => {
 			return obj.id.toString() === str
 		})
+	}
+
+	filters.schoolIsReady = school => {
+		var isReady = true
+		school.issues.forEach(issue => {
+			if (issue.isResolved == 'false') {
+				isReady = false
+			}
+		})
+		return isReady
+	}
+
+	filters.hasNotes = issues => {
+		var hasNotes = false
+		issues.forEach(issue => {
+			if (issue.notes.length != 0) {
+				hasNotes = true
+			}
+		})
+		return hasNotes
+	}
+
+	filters.actionNeededCount = school => {
+		var count = 0
+		school.issues.forEach(issue => {
+			if (issue.isResolved == 'false') {
+				if (issue.pupils) {
+					if (issue.pupils.length > 0) {
+						count += issue.pupils.length
+					} else {
+						count++
+					}
+				} else {
+					count++
+				}
+			}
+		})
+		return count
+	}
+
+	filters.issuesArray = school => {
+		var output = []
+		school.issues.forEach(issue => {
+			if (issue.isResolved == 'false') {
+				output.push(issue)
+			}
+		})
+		return output
+	}
+
+	filters.resolvedArray = school => {
+		var output = []
+		school.issues.forEach(issue => {
+			if (issue.isResolved != 'false') {
+				output.push(issue)
+			}
+		})
+		return output
+	}
+
+	filters.hasExplanations = school => {
+		school.issues.forEach(issue => {
+			if (issue.isResolved == 'true') {
+				return true
+			}
+		})
+		return false
+	}
+
+	filters.countLabel = (count, singleLabel, pluralLabel) => {
+		if (count == 1) {
+			return `1 ${singleLabel}`
+		} else if (count > 1) {
+			return `${filters.friendlyNumber(count)} ${pluralLabel}`
+		}
+		return `0 ${pluralLabel}`
 	}
 
 	filters.getByCode = (array, str) => {

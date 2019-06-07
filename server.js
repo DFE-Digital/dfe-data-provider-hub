@@ -387,7 +387,9 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
 	console.error(err.message)
 	res.status(err.status || 500)
-	res.send(err.message)
+	res.render('error', {
+		message: err.message
+	})
 })
 
 console.log('\nGOV.UK Prototype Kit v' + releaseVersion)

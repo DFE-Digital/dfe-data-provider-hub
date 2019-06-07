@@ -89,6 +89,7 @@ test('create a school object', () => {
 	)
 	expect(result.name == testSchoolName).toBeTruthy()
 	expect(result.LAESTAB.includes(testLaCode)).toBeTruthy()
+	expect(result.provider).toBeTruthy()
 	expect(result.type == testSchoolType).toBeTruthy()
 	expect(result.noOfQueries).toBe(testNoOfQueries)
 })
@@ -97,6 +98,7 @@ test('generate a simulated school', () => {
 	const result = Generate.school()
 	expect(result.name.length).toBeGreaterThan(0)
 	expect(result.LAESTAB.length).toBe(8)
+	expect(result.provider).toBeTruthy()
 	expect(result.type == 'academy' || result.type == 'maintained').toBeTruthy()
 	expect(result.issues.length).toBe(0)
 })
@@ -109,6 +111,7 @@ test('generate a given number of simulated schools', () => {
 	result.forEach(sample => {
 		expect(sample.name).toBeTruthy()
 		expect(sample.LAESTAB).toBeTruthy()
+		expect(sample.provider).toBeTruthy()
 		expect(sample.type == 'academy' || sample.type == 'maintained').toBeTruthy()
 		expect(!isNaN(sample.noOfQueries)).toBeTruthy()
 	})
@@ -127,7 +130,8 @@ test('generate a number of simulated queries', () => {
 		expect(
 			sample.type == 'pupil' ||
 				sample.type == 'school' ||
-				sample.type == 'term-on-term'
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
 		).toBeTruthy()
 		expect(sample.id).not.toBeNull()
 		expect(sample.handled == 'false').toBeTruthy()
@@ -150,7 +154,8 @@ test('request more queries than exists', () => {
 		expect(
 			sample.type == 'pupil' ||
 				sample.type == 'school' ||
-				sample.type == 'term-on-term'
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
 		).toBeTruthy()
 		expect(sample.id).not.toBeNull()
 		expect(sample.handled == 'false').toBeTruthy()
@@ -171,11 +176,57 @@ test('generate a number of simulated unexplained queries for school users', () =
 		expect(
 			sample.type == 'pupil' ||
 				sample.type == 'school' ||
-				sample.type == 'term-on-term'
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
 		).toBeTruthy()
+		expect(sample.isResolved == 'false').toBeTruthy()
 		expect(sample.id).not.toBeNull()
 		expect(sample.handled == 'false').toBeTruthy()
 		expect(sample.notes.length).toBe(0)
+	})
+})
+
+test('request more simulated unexplained queries for school users than exists', () => {
+	const queryArray = require('./simulated-data/queries')
+	const requestAmount = queryArray.length + 300
+	const result = Generate.schoolQueries(requestAmount, queryArray)
+	expect(Array.isArray(result)).toBeTruthy()
+	expect(result.length).toBe(queryArray.length)
+
+	result.forEach(sample => {
+		expect(sample.confirmationIsAcceptable).not.toBeNull()
+		expect(sample.description).toBeTruthy()
+		expect(sample.guide).toBeTruthy()
+		expect(Array.isArray(sample.notes)).toBeTruthy()
+		expect(sample.number).toBeTruthy()
+		expect(
+			sample.type == 'pupil' ||
+				sample.type == 'school' ||
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
+		).toBeTruthy()
+		expect(sample.id).not.toBeNull()
+		expect(sample.handled == 'false').toBeTruthy()
+	})
+})
+
+test('request more errors than exists', () => {
+	const errorArray = require('./simulated-data/errors')
+	const requestAmount = errorArray.length + 300
+	const result = Generate.errors(requestAmount, errorArray)
+	expect(Array.isArray(result)).toBeTruthy()
+	expect(result.length).toBe(errorArray.length)
+
+	result.forEach(sample => {
+		expect(sample.description).toBeTruthy()
+		expect(sample.number).toBeTruthy()
+		expect(
+			sample.type == 'pupil' ||
+				sample.type == 'school' ||
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
+		).toBeTruthy()
+		expect(sample.id).not.toBeNull()
 	})
 })
 
@@ -190,7 +241,8 @@ test('generate a number of simulated errors', () => {
 		expect(
 			sample.type == 'pupil' ||
 				sample.type == 'school' ||
-				sample.type == 'term-on-term'
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
 		).toBeTruthy()
 		expect(sample.id).not.toBeNull()
 	})
@@ -208,10 +260,32 @@ test('generate a number of simulated unexplained errors for school users', () =>
 		expect(
 			sample.type == 'pupil' ||
 				sample.type == 'school' ||
-				sample.type == 'term-on-term'
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
 		).toBeTruthy()
+		expect(sample.isResolved == 'false').toBeTruthy()
 		expect(sample.id).not.toBeNull()
 		expect(sample.handled == 'false').toBeTruthy()
 		expect(sample.notes.length).toBe(0)
+	})
+})
+
+test('request more simulated unexplained errors for school users than exists', () => {
+	const errorArray = require('./simulated-data/errors')
+	const requestAmount = errorArray.length + 300
+	const result = Generate.schoolErrors(requestAmount, errorArray)
+	expect(Array.isArray(result)).toBeTruthy()
+	expect(result.length).toBe(errorArray.length)
+
+	result.forEach(sample => {
+		expect(sample.description).toBeTruthy()
+		expect(sample.number).toBeTruthy()
+		expect(
+			sample.type == 'pupil' ||
+				sample.type == 'school' ||
+				sample.type == 'term-on-term' ||
+				sample.type == 'class'
+		).toBeTruthy()
+		expect(sample.id).not.toBeNull()
 	})
 })

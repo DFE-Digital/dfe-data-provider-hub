@@ -307,7 +307,8 @@ Generate.newSchool = (name, laCode, type, noOfQueries, noOfErrors) => {
 		noOfErrors,
 		LAESTAB: laCode.toString() + '/' + Generate.randomCode(4),
 		hasBuilt: false,
-		issues: []
+		issues: [],
+		provider: Generate.name()
 	}
 }
 
@@ -392,6 +393,7 @@ Generate.schoolQueries = (amount, queryArray) => {
 	queryArray.forEach(query => {
 		query.id = Generate.uuid()
 		query.handled = 'false'
+		query.isResolved = 'false'
 		query.notes = []
 		output.push(query)
 	})
@@ -440,6 +442,7 @@ Generate.schoolErrors = (amount, errorArray) => {
 	errorArray.forEach(error => {
 		error.id = Generate.uuid()
 		error.handled = 'false'
+		error.isResolved = 'false'
 		error.notes = []
 		output.push(error)
 	})

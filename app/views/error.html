@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block pageTitle %}
+    Prototype error
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-one-half">
+            <h1 class="govuk-heading-xl">There was a problem</h1>
+            {% if not message %}
+                {% set message = data['error-message'] %}
+            {% endif %}
+            {% if message %}
+                {{ govukInsetText({
+                    text: message
+                }) }}
+            {% endif %}
+            <p class="govuk-body">
+                To report this issue use the #prototypes channel on the Send Data to DfE Slack instance.
+            </p>
+            {{ govukButton({
+                text: 'Return to the home page',
+                href: '/',
+                classes: ' '
+            }) }}
+        </div>
+
+</div>
+
+{% endblock %}
+
+
+

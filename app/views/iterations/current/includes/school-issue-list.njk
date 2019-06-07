@@ -1,0 +1,105 @@
+{% macro schoolIssueList(params) %}
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+        <table id="issueTable" class="govuk-table govuk-table--top-align issue-table">
+            
+            <caption class="govuk-table__caption govuk-visually-hidden">Issues</caption>
+            
+            
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    
+                    <th class="govuk-table__header" scope="col">
+                        Issue
+                    </th>
+
+                    <th class="govuk-table__header width-medium" scope="col">
+                        Type
+                    </th>
+
+                    {% if params.issues | hasNotes %}
+                        <th class="govuk-table__header" scope="col">
+                            Previous notes
+                        </th>
+                    {% endif %}
+                    
+                    <th class="govuk-table__header numeric" scope="col">
+                    </th>
+                
+                </tr>
+            </thead>
+            
+            <tbody class="govuk-table__body">
+
+                {% for issue in params.issues | sort(false, true, 'category') %}
+
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
+                            <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+                                {{ issue.number }}
+                                {% if issue.pupils | length > 0 %}
+                                    <span class="no-wrap type-tag count  govuk-!-margin-left-2">
+                                        {% if issue.pupils | length != 1 %}
+                                            {{ issue.pupils | length }} pupils
+                                            {% set consolidatedQuery = true %}
+                                        {% else %}
+                                            1 pupil
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                            </h3>
+                            <p>
+                                {{ issue.description }}
+                            </p>
+                        </th>
+                        <td class="govuk-table__cell">
+                            <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8">
+                                {{ issue.category | sentenceCase }}
+                            </span>
+                        </td>
+
+                        {% if params.issues | hasNotes %}
+                            <td class="govuk-table__cell">
+                                {% if issue.notes | length == 0 %}
+                                    −
+                                {% else %}
+                                    {% for note in issue.notes %}
+                                        <div class="note {{ note.type }}">
+                                            <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                                            {{ note.text }}
+                                        </div>
+                                    {% endfor -%}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <div class="action-buttons">
+                                {% if issue.pupils | length != 0 %}
+                                    <form action="single-query">
+                                        <input type="hidden" name="numberOfPupilsMoved" value="0">
+                                        <input type="hidden" name="selected-query" value="{{ issue.id }}">
+                                        <button type="submit" class="govuk-button">
+                                            Resolve
+                                        </button>
+                                    </form>
+                                {% else %}
+                                <button type="button" class="govuk-button open-dialog">
+                                    Resolve
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+{% endmacro %}

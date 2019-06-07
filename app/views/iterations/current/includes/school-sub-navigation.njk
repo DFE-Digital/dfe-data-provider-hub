@@ -1,0 +1,24 @@
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-sub-navigation/macro.njk' import hmctsSubNavigation %}
+{% macro schoolSubNavigation(params) %}
+{{ hmctsSubNavigation({
+    label: 'Sub navigation',
+    items: [
+        {
+            text: params.school | actionNeededCount | countLabel('issue', 'issues') + ' to resolve',
+            href: 'issues',
+            active: params.activePage == 'issues'
+        } if not params.isReady, 
+        {
+            text: 'Saved explanations',
+            href: 'explanations',
+            active: params.activePage == 'explanations'
+        } if params.school | hasExplanations,
+        {
+            text: 'View all census data',
+            href: 'census-data',
+            active: params.activePage == 'census-data'
+        }
+    ]
+}) }} 
+{% endmacro %}

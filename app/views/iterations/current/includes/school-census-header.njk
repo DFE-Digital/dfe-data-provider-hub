@@ -1,0 +1,46 @@
+{% from "button/macro.njk" import govukButton %}
+{% from "warning-text/macro.njk" import govukWarningText %}
+{% macro schoolCensusHeader(params) %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+        {% if params.school.issues | length == 0 %}
+            <script>
+                window.location.href = 'no-issues'
+            </script>
+        {% else %}
+            {% if params.isReady %}
+                <h1 class="govuk-heading-l">All issues have an explanation</h1>
+                <p>
+                Check your explanations carefully. You will not be able to view them once they have been sent.
+                </p>
+                <p>
+                You can then send your explanations to the Department for Education for review.
+                </p>
+                <p>
+                They will contact you by email to confirm your submission, or to ask for more information.
+                </p>
+                {{ govukButton({
+                    text: 'Send explanations',
+                    href: 'return-note',
+                    classes: ''
+                }) }}
+            {% else %}
+                <h1 class="govuk-heading-l">Resolve the issues in your data</h1>
+                <p>
+                There are some issues in the census data you have sent us.
+                </p>
+                <p>
+                You need to resolve all issues before the census submission deadline.
+                </p>
+                {{ govukWarningText({
+                    text: 'You must be sure the data in your MIS is correct before you begin.',
+                    iconFallbackText: 'Warning'
+                }) }}
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="govuk-grid-column-one-half" style="text-align: right;">
+        <span class="govuk-caption-l">Data sent on 11:21 16 May 2019</span>
+    </div>
+</div>
+{% endmacro %}

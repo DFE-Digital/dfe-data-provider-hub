@@ -1,3 +1,5 @@
+@import 'components/issues';
+
 // Fix for background when footer is not sticky
 html {
 	background-color: #dee0e2;
@@ -14,4 +16,76 @@ html {
 .govuk-body,
 p {
 	max-width: 34em;
+}
+
+// Type tags to show issue types and pupil counts
+
+a.type-tag,
+.type-tag {
+	font-weight: bold;
+	display: inline-block;
+	font-family: $govuk-font-family;
+	vertical-align: middle;
+	color: govuk-colour('blue');
+	background-color: rgba(govuk-colour('blue'), 0.025);
+	padding: 3px 5px 1px 5px;
+	margin-bottom: 5px;
+	text-decoration: none;
+	border: 1.5px solid govuk-colour('blue');
+	border-radius: 3px;
+	table & {
+		font-size: 16px;
+	}
+	&.school {
+		border-color: govuk-colour('green');
+		color: govuk-colour('green');
+		background-color: rgba(govuk-colour('green'), 0.025);
+	}
+	&.error {
+		border-color: govuk-colour('red');
+		color: govuk-colour('red');
+		background-color: rgba(govuk-colour('red'), 0.025);
+	}
+	&.count {
+		font-size: 16px;
+		border-color: lighten(govuk-colour('grey-3'), 5%);
+		color: govuk-colour('black');
+		background-color: lighten(govuk-colour('grey-3'), 5%);
+	}
+	&.query {
+		border-color: darken(govuk-colour('orange'), 10%);
+		color: darken(govuk-colour('orange'), 10%);
+		background-color: rgba(darken(govuk-colour('orange'), 10%), 0.025);
+	}
+	&.term,
+	&.term-on-term {
+		border-color: govuk-colour('pink');
+		color: govuk-colour('pink');
+		background-color: rgba(govuk-colour('pink'), 0.025);
+	}
+	&.class {
+		color: govuk-colour('brown');
+		border-color: govuk-colour('brown');
+		background-color: rgba(govuk-colour('brown'), 0.025);
+	}
+	&.count-tag {
+		font-size: 14px;
+		text-decoration: none;
+		margin-left: 5px;
+	}
+}
+
+// Alight cell content to top of cells within given table
+
+table.govuk-table--top-align {
+	th,
+	td {
+		vertical-align: top;
+	}
+}
+
+// Make buttons smaller when within a table
+
+table .govuk-button {
+	font-size: 16px;
 }
