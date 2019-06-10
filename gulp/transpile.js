@@ -13,7 +13,6 @@ const config = require('./config.json')
 gulp.task('transpile', function() {
 	return gulp
 		.src([
-			config.paths.assets + 'javascripts/jquery-1.11.3.js',
 			config.paths.assets + 'javascripts/modal.js',
 			config.paths.assets + 'javascripts/step-by-step-navigation.js',
 			config.paths.assets + 'javascripts/auto-store-data.js',

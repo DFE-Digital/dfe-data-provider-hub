@@ -37,7 +37,7 @@
 
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
-                            <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+                            <h3 class="govuk-heading-m govuk-!-margin-bottom-1 issueData" data-modal-id="modal-title">
                                 {{ issue.number }}
                                 {% if issue.pupils | length > 0 %}
                                     <span class="no-wrap type-tag count  govuk-!-margin-left-2">
@@ -50,12 +50,12 @@
                                     </span>
                                 {% endif %}
                             </h3>
-                            <p>
+                            <p class="issueData" data-modal-id="modal-description">
                                 {{ issue.description }}
                             </p>
                         </th>
                         <td class="govuk-table__cell">
-                            <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8">
+                            <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8 issueCategory">
                                 {{ issue.category | sentenceCase }}
                             </span>
                         </td>
@@ -86,7 +86,7 @@
                                         </button>
                                     </form>
                                 {% else %}
-                                <button type="button" class="govuk-button open-dialog">
+                                <button type="button" class="govuk-button open-modal">
                                     Resolve
                                 </button>
                                 {% endif %}

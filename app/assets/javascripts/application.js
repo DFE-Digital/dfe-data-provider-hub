@@ -60,7 +60,7 @@ $('input').attr('autocomplete', 'off')
 // Reload page when user goes back so data can be refreshed
 
 window.addEventListener('pageshow', event => {
-	var historyTraversal =
+	const historyTraversal =
 		event.persisted ||
 		(typeof window.performance != 'undefined' &&
 			window.performance.navigation.type === 2)
@@ -69,3 +69,11 @@ window.addEventListener('pageshow', event => {
 		window.location.reload()
 	}
 })
+
+// Handle modal open and close actions
+
+const navModalEl = document.querySelector('.modal')
+const modalOverlay = document.querySelector('.modal-overlay')
+
+var myModal = new Modal(navModalEl, modalOverlay)
+myModal.addEventListeners('.open-modal', '.close-modal')

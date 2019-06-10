@@ -1,0 +1,90 @@
+{% from "button/macro.njk" import govukButton %}
+{% from "radios/macro.njk" import govukRadios %}
+{% from "textarea/macro.njk" import govukTextarea %}
+
+{% macro schoolIssueModal(params) %}
+
+
+<div class="modal" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+
+    {% set responseHTML %}
+        <p class="guide"></p>
+        {{ govukTextarea({
+                id: 'reject-reason',
+                name: 'reject-reason',
+                label: {
+                    text: 'Reply' if isReplying else 'Give an explanation'
+                }
+        }) }}
+    {% endset %}
+    
+    <h3 id="modal-title" class="govuk-heading-l govuk-!-margin-bottom-1"></h3>
+    <p id="modal-description"></p>
+
+    <form action="/issue/explain">
+        <div class="error-content">
+            {{ govukRadios({
+                idPrefix: 'resolve-action',
+                name: 'resolve-action',
+                fieldset: {
+                    legend: {
+                        text: 'Resolution',
+                        isPageHeading: false,
+                        classes: 'govuk-visually-hidden'
+                    }
+                },
+                items: [
+                    {
+                        text: 'I’ll correct the data in my MIS',
+                        value: 'mis'
+                    },
+                    {
+                        text: 'There is a reason I cannot correct the data',
+                        value: 'explain',
+                        conditional: {
+                            html: responseHTML
+                        }
+                    }
+                ]
+            }) }}
+        </div>
+        
+        <div class="query-content">
+            {{ responseHTML | safe }}
+        </div>
+
+        <input type="hidden" id="selected-issue" name="selected-issue">
+        {{ govukButton({
+            html: 'Save and continue',
+            classes: 'send'
+        }) }}
+    </form>
+    <p>
+        <a href="#" class="close-modal">Cancel</a>
+    </p>
+        
+</div>
+
+<div class="modal-overlay" tabindex="-1"></div>
+
+<script>
+
+    $('.open-modal').on('click', function() {
+        var issueRow = $(this).closest('tr');
+        var issueCategory = issueRow.find('.issueCategory').text().trim();
+        issueRow.find('.issueData').each(function() {
+            var id = $(this).attr('data-modal-id');
+            $('#' + id).html($(this).html());
+        });
+        if (issueCategory.toLowerCase() == 'error') {
+            $('.error-content').show()
+            $('.query-content').hide()
+        } else {
+            $('.query-content').show()
+            $('.error-content').hide()
+        }
+    });
+
+</script>
+
+{% endmacro %}
