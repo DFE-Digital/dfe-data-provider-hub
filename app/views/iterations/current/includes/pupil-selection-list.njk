@@ -1,0 +1,209 @@
+{% from "button/macro.njk" import govukButton %}
+{% from "warning-text/macro.njk" import govukWarningText %}
+{% from "textarea/macro.njk" import govukTextarea %}
+
+{% macro pupilSelectionList(params) %}
+
+{% set issue = params.issue %}
+{% set hasMultiplePupils = issue.pupils | length > 1 %}
+{% set isError = issue.category == 'error' %}
+
+<form id="pupil-select-form" action="" method="post">
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-full">
+
+            <table id="pupilTable" class="govuk-table govuk-table--top-align pupil-table">
+                
+                <caption class="govuk-table__caption">{{ issue.pupils | length | pluralLabel('Pupil', 'Pupils') }} with {{ issue.category | lowerCase }} {{ issue.number }}</caption>
+                
+                
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row govuk-checkboxes govuk-checkboxes--small">
+                        {% if hasMultiplePupils %}
+                            <th class="govuk-table__header govuk-table__checkbox-cell govuk-table__checkbox-cell" scope="col">
+                                <div class="govuk-checkboxes__item">
+                                    <input class="govuk-checkboxes__input" type="checkbox" id="select-all" />
+                                    <label class="govuk-checkboxes__label" for="select-all"></label>
+                                </div>
+                            </th>
+                        {% endif %}
+                        
+                        <th class="govuk-table__header" scope="col">
+                            UPN
+                        </th>
+
+                        <th class="govuk-table__header" scope="col">
+                            Name
+                        </th>
+                        
+                        <th class="govuk-table__header" scope="col">
+                            Date of birth
+                        </th>
+                    
+                    </tr>
+                </thead>
+                
+                <tbody class="govuk-table__body">
+
+                    {% for pupil in issue.pupils | sort(false, true, 'UPN') %}
+
+                        <tr class="govuk-table__row">
+                            {% if hasMultiplePupils %}
+                                <th class="govuk-table__header govuk-table__checkbox-cell govuk-checkboxes govuk-checkboxes--small" scope="row">
+                                    <div class="govuk-checkboxes__item">
+                                        <input type="checkbox" class="govuk-checkboxes__input" name="selected-pupils" id="pupil-{{ loop.index - 1 }}" value="{{ pupil.id }}"/>
+                                        <label class="govuk-checkboxes__label" for="pupil-{{ loop.index - 1 }}" name="selected-pupils"></label>
+                                    </div>
+                                </th>
+                            {% endif %}
+                            <th class="govuk-table__header" scope="row">
+                                <a href="#" class="open-dialog plain-link" data-pupil="{{ loop.index - 1 }}">
+                                    <span class="issueData" data-modal-id="modal-title">
+                                        {{ pupil.UPN }}
+                                    </span>
+                                </a>
+                            </th>
+                            <td class="govuk-table__cell">
+                                {% set name = '<span class="last-name">' + pupil.surname + '</span>,
+                                <span class="first-name">' + pupil.firstname + '</span>' %}
+                                <span class="issueData" data-modal-id="modal-description">
+                                    {{ name | safe }}
+                                </span>
+                            </td>
+                            <td class="govuk-table__cell">
+                                <span class="issueData" data-modal-id="pupil-dob">{{ pupil.dob | formatDoB }}</span>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="govuk-grid-row">
+        
+        <div class="govuk-grid-column-one-half">
+            
+            {% if params.isResolved %}
+
+                {{ govukButton({
+                    html: 'Undo explanation for selected pupils' if hasMultiplePupils else 'Undo explanation'
+                }) }}
+
+            {% else %}
+
+                {% if isError %}
+
+                    {{ govukWarningText({
+                        html: 'This type of error should be <a href="mis-warning">resolved in your MIS</a>. We can only accept an explanation for this error in certain cases.' | safe,
+                        iconFallbackText: 'Warning'
+                    }) }}
+
+                {% else %}
+
+                    {% if isResolved == false %}
+
+                        {{ govukInsetText({
+                            text: 'Select one or more pupils from the list and explain why you cannot resolve this ' + issue.category + '.',
+                            classes: 'no-selection-hide'
+                        }) }}
+
+                    {% endif %}
+
+                    {{ govukWarningText({
+                        text: 'You must check the data in your MIS is correct for ' + issue.pupils | pluralLabel('this pupil', 'each pupil') + '.',
+                        iconFallbackText: 'Warning'
+                    }) }}
+
+                    <h4 class="govuk-heading-s">If you are sure the data for {{ issue.pupils | pluralLabel('this pupil', 'each of these pupils') }} is correct in your MIS you must give us an explanation that follows this guide:</h4>
+                    <p>
+                        {{ issue.guide }}
+                    </p>
+
+                {% endif %}
+
+                {{ govukTextarea({
+					id: 'explanation-content',
+					name: 'response-note',
+					classes: 'govuk-input--width-30',
+					label: {
+						text: 'Explain why you cannot fix this data in your MIS' if isError else 'Explanation'
+					}
+				}) }}
+
+
+				{{ govukButton({
+					html: 'Save explanation'
+				}) }}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</form>
+
+<script>
+    $('.govuk-table__head .govuk-table__checkbox-cell input[type=checkbox]').on(
+        'change',
+        function() {
+            $(this)
+                .closest('table')
+                .find('.govuk-table__checkbox-cell input[type=checkbox]')
+                .prop('checked', $(this).prop('checked'));
+            $(this)
+                .closest('table')
+                .find('.govuk-table__body tr')
+                .removeClass('highlight-row');
+            if ($(this).prop('checked')) {
+                $(this)
+                    .closest('table')
+                    .find('.govuk-table__body tr')
+                    .addClass('highlight-row');
+            }
+            validateSelected();
+        }
+    )
+    $('.govuk-table__body .govuk-table__checkbox-cell input[type=checkbox]').on(
+        'change',
+        function() {
+            var row = $(this).closest('tr');
+            row.removeClass('highlight-row');
+            if ($(this).prop('checked')) {
+                row.addClass('highlight-row');
+            }
+            validateSelected();
+        }
+    )
+
+    function validateSelected() {
+        var maximumCount = $(
+            '.govuk-table__body .govuk-table__checkbox-cell input[type=checkbox]'
+        ).length;
+        var selectedCount = $(
+            '.govuk-table__body .govuk-table__checkbox-cell input[type=checkbox]:checked'
+        ).length;
+
+        //{% if params.isResolved == false %}
+        $('form').attr('action', selectedCount == maximumCount ? '/add-explanation' : '/add-selected-explanation');
+        //{% endif %}
+        
+        if (selectedCount != 0) {
+            $('.selected-button').removeClass('govuk-button--disabled');
+            $('button.selected-button').prop('disabled', false);
+            $('.explanation-field').show();
+        } else {
+            $('.selected-button').addClass('govuk-button--disabled');
+            $('button.selected-button').prop('disabled', true);
+            $('.explanation-field').hide();
+        }
+    }
+</script>
+{% endmacro %}

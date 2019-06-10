@@ -27,15 +27,15 @@ const windowPath = window.location.pathname
 
 // Apply to all links, forms and input values with #root# placeholder
 
-$('a[href*=#root#]').each((_, link) => {
+$('a[href*=\\#root\\#]').each((_, link) => {
 	$(link).attr('href', iterationRoute($(link).attr('href'), windowPath))
 })
 
-$('input[value*=#root#]').each((_, input) => {
+$('input[value*=\\#root\\#]').each((_, input) => {
 	$(input).attr('value', iterationRoute($(input).attr('value'), windowPath))
 })
 
-$('form[action*=#root#]').each((_, form) => {
+$('form[action*=\\#root\\#]').each((_, form) => {
 	$(form).attr('action', iterationRoute($(form).attr('action'), windowPath))
 })
 
@@ -75,5 +75,7 @@ window.addEventListener('pageshow', event => {
 const navModalEl = document.querySelector('.modal')
 const modalOverlay = document.querySelector('.modal-overlay')
 
-var myModal = new Modal(navModalEl, modalOverlay)
-myModal.addEventListeners('.open-modal', '.close-modal')
+if (navModalEl && modalOverlay) {
+	var myModal = new Modal(navModalEl, modalOverlay)
+	myModal.addEventListeners('.open-modal', '.close-modal')
+}

@@ -3,9 +3,9 @@
 
     <div class="govuk-grid-column-two-thirds">
 
-        <table id="issueTable" class="govuk-table govuk-table--top-align issue-table">
+        <table id="issueTable" class="govuk-table govuk-table--top-align issue-table hide-caption">
             
-            <caption class="govuk-table__caption govuk-visually-hidden">Issues</caption>
+            <caption class="govuk-table__caption">Issues</caption>
             
             
             <thead class="govuk-table__head">
@@ -15,7 +15,7 @@
                         Issue
                     </th>
 
-                    <th class="govuk-table__header width-medium" scope="col">
+                    <th class="govuk-table__header" scope="col">
                         Type
                     </th>
 
@@ -78,9 +78,8 @@
                         <td class="govuk-table__cell govuk-table__cell--numeric">
                             <div class="action-buttons">
                                 {% if issue.pupils | length != 0 %}
-                                    <form action="single-query">
-                                        <input type="hidden" name="numberOfPupilsMoved" value="0">
-                                        <input type="hidden" name="selected-query" value="{{ issue.id }}">
+                                    <form action="issue-details">
+                                        <input type="hidden" name="current-issue" value="{{ issue.id }}">
                                         <button type="submit" class="govuk-button">
                                             Resolve
                                         </button>

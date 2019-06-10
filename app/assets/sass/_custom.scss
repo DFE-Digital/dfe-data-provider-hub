@@ -90,3 +90,62 @@ table.govuk-table--top-align {
 table .govuk-button {
 	font-size: 16px;
 }
+
+// Fix jumping table caption on safari
+
+table {
+	position: relative;
+
+	&:not(.hide-caption) {
+		margin-top: 30px;
+
+		caption {
+			position: absolute;
+			top: -30px;
+		}
+	}
+
+	.hide-caption {
+		caption {
+			position: absolute !important;
+			width: 1px !important;
+			height: 1px !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			overflow: hidden !important;
+			clip: rect(0 0 0 0) !important;
+			-webkit-clip-path: inset(50%) !important;
+			clip-path: inset(50%) !important;
+			border: 0 !important;
+			white-space: nowrap !important;
+		}
+	}
+}
+
+// Amend positioning for checkboxes within a cell
+
+.govuk-table__checkbox-cell {
+	position: relative;
+	padding-left: 10px;
+	padding-top: 2.5px;
+	width: 30px;
+	label::before {
+		background-color: white;
+	}
+}
+
+// Add a highlight color to selected rows
+
+tr.highlight-row {
+	th,
+	td {
+		background-color: rgba($govuk-focus-colour, 0.3);
+	}
+}
+
+// Remove underline from links when not required
+
+a.plain-link,
+.plain-link a {
+	text-decoration: none;
+}

@@ -83,6 +83,17 @@ module.exports = function(env) {
 		return months[Number(input)]
 	}
 
+	filters.formatDoB = str => {
+		const date = new Date(str)
+		return (
+			date.getDate() +
+			' ' +
+			numberToMonthString(date.getMonth()) +
+			' ' +
+			date.getFullYear()
+		)
+	}
+
 	filters.formatDate = str => {
 		const date = new Date(str)
 		return (
@@ -292,6 +303,15 @@ module.exports = function(env) {
 			return `${filters.friendlyNumber(count)} ${pluralLabel}`
 		}
 		return `0 ${pluralLabel}`
+	}
+
+	filters.pluralLabel = (count, singleLabel, pluralLabel) => {
+		if (count == 1) {
+			return `${singleLabel}`
+		} else if (count > 1) {
+			return `${pluralLabel}`
+		}
+		return `${pluralLabel}`
 	}
 
 	filters.getByCode = (array, str) => {

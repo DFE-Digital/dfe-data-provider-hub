@@ -1,0 +1,53 @@
+{% from "./../includes/identity-bar.njk" import schoolIdentityBar %}
+{% from "./../includes/pupil-selection-list.njk" import pupilSelectionList %}
+
+{% extends 'layout-data-dfe.html' %}
+
+{% set school = data.schools | getById(data['selected-school']) %}
+{% set issue = school.issues | getById(data['current-issue']) %}
+{% set isResolved = issue.isResolved != 'false' %}
+{% set isReady = school | schoolIsReady %}
+
+{% block pageTitle %}
+    Issue details: {{ issue.category | sentenceCase }} {{ issue.number }}
+{% endblock %}
+
+{% block postHeader %}
+
+    {{ schoolIdentityBar({
+        school: school,
+        isReady: isReady
+    }) }}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            {{ govukBackLink({
+                text: 'Back',
+                href: 'responses' if isResolved else 'issues',
+                classes: 'govuk-!-margin-bottom-5'
+            }) }}
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+                {{ issue.number }}
+                <span class="type-tag {{ issue.category }} govuk-!-margin-left-2 govuk-body">
+                    {{ issue.category | sentenceCase }}
+                </span>
+            </h1>
+            <p>
+                {{ issue.description }}
+            </p>
+        </div>
+    </div>
+
+    {{ pupilSelectionList({
+        issue: issue,
+        isResolved: isResolved
+    }) }}
+
+{% endblock %}
+
+
+
