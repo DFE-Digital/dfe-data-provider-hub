@@ -1,0 +1,55 @@
+{% from "./../includes/identity-bar.njk" import schoolIdentityBar %}
+{% from "./../includes/school-census-header.njk" import schoolCensusHeader %}
+{% from "./../includes/school-sub-navigation.njk" import schoolSubNavigation %}
+{% from "./../includes/school-issue-list.njk" import schoolIssueList %}
+{% from "./../includes/school-issue-modal.njk" import schoolIssueModal %}
+
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    Resolve the issues in your data
+{% endblock %}
+
+{% set school = data.schools | getById(data['selected-school']) %}
+{% set isReady = school | schoolIsReady %}
+
+{% block postHeader %}
+
+    {{ schoolIdentityBar({
+        school: school,
+        isReady: isReady
+    }) }}
+
+{% endblock %}
+
+{% block content %}
+
+    {{ schoolCensusHeader({
+        school: school,
+        isReady: isReady
+    }) }}
+
+    {{ schoolSubNavigation({
+        school: school,
+        isReady: isReady,
+        activePage: 'reports'
+    }) }}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <h3 class="govuk-heading-m">Absence insight report</h3>
+            <p>View the absence data for {{ school.name }} and see how it compares nationally both during and after the school census window.</p>
+            {{ govukButton({
+                text: 'Open report',
+                href: '#',
+                classes: ' '
+            }) }}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+

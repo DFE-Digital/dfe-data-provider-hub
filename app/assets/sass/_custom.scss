@@ -1,5 +1,6 @@
 @import 'components/issues';
 @import 'components/modal';
+@import 'components/callout';
 
 // Fix for background when footer is not sticky
 html {
@@ -105,7 +106,7 @@ table {
 		}
 	}
 
-	.hide-caption {
+	&.hide-caption {
 		caption {
 			position: absolute !important;
 			width: 1px !important;

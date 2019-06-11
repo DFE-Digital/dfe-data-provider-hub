@@ -79,3 +79,7 @@ if (navModalEl && modalOverlay) {
 	var myModal = new Modal(navModalEl, modalOverlay)
 	myModal.addEventListeners('.open-modal', '.close-modal')
 }
+
+// Make all links retain state when visited
+
+$('a[href]').addClass('govuk-link--no-visited-state')

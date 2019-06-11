@@ -51,7 +51,7 @@
                                 {% endif %}
                             </h3>
                             <p class="issueData" data-modal-id="modal-description">
-                                {{ issue.description }}
+                                {{ issue.description | addFullStop }}
                             </p>
                         </th>
                         <td class="govuk-table__cell">
@@ -81,12 +81,12 @@
                                     <form action="issue-details">
                                         <input type="hidden" name="current-issue" value="{{ issue.id }}">
                                         <button type="submit" class="govuk-button">
-                                            Resolve
+                                            Explain
                                         </button>
                                     </form>
                                 {% else %}
                                 <button type="button" class="govuk-button open-modal">
-                                    Resolve
+                                    Explain
                                 </button>
                                 {% endif %}
                             </div>

@@ -13,7 +13,7 @@
                 id: 'reject-reason',
                 name: 'reject-reason',
                 label: {
-                    text: 'Reply' if isReplying else 'Give an explanation'
+                    text: 'Explanation'
                 }
         }) }}
     {% endset %}
@@ -23,30 +23,7 @@
 
     <form action="/issue/explain">
         <div class="error-content">
-            {{ govukRadios({
-                idPrefix: 'resolve-action',
-                name: 'resolve-action',
-                fieldset: {
-                    legend: {
-                        text: 'Resolution',
-                        isPageHeading: false,
-                        classes: 'govuk-visually-hidden'
-                    }
-                },
-                items: [
-                    {
-                        text: 'I’ll correct the data in my MIS',
-                        value: 'mis'
-                    },
-                    {
-                        text: 'There is a reason I cannot correct the data',
-                        value: 'explain',
-                        conditional: {
-                            html: responseHTML
-                        }
-                    }
-                ]
-            }) }}
+            {{ responseHTML | safe }}
         </div>
         
         <div class="query-content">
@@ -55,7 +32,7 @@
 
         <input type="hidden" id="selected-issue" name="selected-issue">
         {{ govukButton({
-            html: 'Save and continue',
+            html: 'Save explanation',
             classes: 'send'
         }) }}
     </form>

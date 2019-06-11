@@ -64,6 +64,25 @@ Generate.randomItemFrom = array => {
 }
 
 /**
+ * Get a random array containing a given number of elements
+ *
+ * @remarks
+ * Gets some random item from a given array if the amount requested is larger than the amount requested the full array with be returned
+ *
+ * @param {any[]} array - the array the random item will come from
+ * @param {number} amount - the maximum number of items to get from the array
+ * @returns A random array of items
+ *
+ */
+
+Generate.randomItemsFrom = (array, amount) => {
+	array = JSON.parse(JSON.stringify(array))
+	shuffle(array)
+	array.length = amount < array.length ? amount : array.length
+	return array
+}
+
+/**
  * Get a random integer given a minimum and maximum number
  *
  * @remarks
@@ -371,9 +390,7 @@ Generate.queries = (amount, queryArray) => {
 		query.handled = 'false'
 		output.push(query)
 	})
-	shuffle(output)
-	output.length = amount < queryArray.length ? amount : queryArray.length
-	return output
+	return Generate.randomItemsFrom(output, amount)
 }
 
 /**
@@ -397,9 +414,7 @@ Generate.schoolQueries = (amount, queryArray) => {
 		query.notes = []
 		output.push(query)
 	})
-	shuffle(output)
-	output.length = amount < queryArray.length ? amount : queryArray.length
-	return output
+	return Generate.randomItemsFrom(output, amount)
 }
 
 /**
@@ -420,9 +435,7 @@ Generate.errors = (amount, errorArray) => {
 		error.id = Generate.uuid()
 		output.push(error)
 	})
-	shuffle(output)
-	output.length = amount < errorArray.length ? amount : errorArray.length
-	return output
+	return Generate.randomItemsFrom(output, amount)
 }
 
 /**
@@ -446,9 +459,7 @@ Generate.schoolErrors = (amount, errorArray) => {
 		error.notes = []
 		output.push(error)
 	})
-	shuffle(output)
-	output.length = amount < errorArray.length ? amount : errorArray.length
-	return output
+	return Generate.randomItemsFrom(output, amount)
 }
 
 module.exports = Generate

@@ -5,7 +5,7 @@
     label: 'Sub navigation',
     items: [
         {
-            text: params.school | actionNeededCount | countLabel('issue', 'issues') + ' to resolve',
+            text: params.school | actionNeededCount | countLabel('issue', 'issues'),
             href: 'issues',
             active: params.activePage == 'issues'
         } if not params.isReady, 
@@ -15,9 +15,14 @@
             active: params.activePage == 'responses'
         } if params.school | hasExplanations,
         {
-            text: 'View all census data',
+            text: 'Census data',
             href: 'census-data',
             active: params.activePage == 'census-data'
+        },
+        {
+            text: 'Reports',
+            href: 'reports',
+            active: params.activePage == 'reports'
         }
     ]
 }) }} 

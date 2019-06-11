@@ -25,22 +25,28 @@
                     classes: ''
                 }) }}
             {% else %}
-                <h1 class="govuk-heading-l">Resolve the issues in your data</h1>
+                <h1 class="govuk-heading-l">Explain the issues in your data</h1>
                 <p>
-                There are some issues in the census data you have sent us.
+                There are some errors and queries with the census data you have sent us.
                 </p>
                 <p>
-                You need to resolve all issues before the census submission deadline.
+                You need to give an explanation for these issues before the census submission deadline.
                 </p>
-                {{ govukWarningText({
-                    text: 'You must be sure the data in your MIS is correct before you begin.',
-                    iconFallbackText: 'Warning'
-                }) }}
             {% endif %}
         {% endif %}
     </div>
     <div class="govuk-grid-column-one-half" style="text-align: right;">
-        <span class="govuk-caption-l">Data sent on 11:21 16 May 2019</span>
+        <div class="app-callout-container">
+            <div class="app-callout">
+                <h3 class="govuk-heading-s">Download all census data</h3>
+                <p class="govuk-body-s">
+                    Download the census data for {{ params.school.name }}
+                </p>
+                <p class="govuk-body-s">
+                    <a href="#">Download as XML</a> <a href="#" class="govuk-!-margin-left-3">Download as CSV</a>
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 {% endmacro %}

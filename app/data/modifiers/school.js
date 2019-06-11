@@ -45,6 +45,9 @@ SchoolModifier.buildSchool = (school, isSchoolUser) => {
 	// Save to school
 	school.issues = issues
 
+	// Timestamp build
+	school.builtOn = new Date()
+
 	// Confirm action is complete
 	school.hasBuilt = true
 	return school

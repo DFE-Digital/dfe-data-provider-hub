@@ -63,6 +63,15 @@ module.exports = function(env) {
 		return toFriendlyNumber(input)
 	}
 
+	filters.addFullStop = input => {
+		if (typeof input === 'string') {
+			if (input.slice(-1) != '.') {
+				return input + '.'
+			}
+		}
+		return input
+	}
+
 	// Render numeric date as month string e.g. '04' becomes 'April'
 
 	const numberToMonthString = input => {
@@ -103,7 +112,7 @@ module.exports = function(env) {
 			' ' +
 			date.getFullYear() +
 			' at ' +
-			('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
+			('0' + date.getHours()).slice(-2) +
 			':' +
 			('0' + date.getMinutes()).slice(-2)
 		)

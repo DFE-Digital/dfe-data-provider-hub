@@ -101,7 +101,7 @@
                 {% if isError %}
 
                     {{ govukWarningText({
-                        html: 'This type of error should be <a href="mis-warning">resolved in your MIS</a>. We can only accept an explanation for this error in certain cases.' | safe,
+                        html: 'This data should be corrected in your MIS. We can only accept an explanation for this error in certain cases.' | safe,
                         iconFallbackText: 'Warning'
                     }) }}
 
@@ -116,14 +116,9 @@
 
                     {% endif %}
 
-                    {{ govukWarningText({
-                        text: 'You must check the data in your MIS is correct for ' + issue.pupils | pluralLabel('this pupil', 'each pupil') + '.',
-                        iconFallbackText: 'Warning'
-                    }) }}
-
-                    <h4 class="govuk-heading-s">If you are sure the data for {{ issue.pupils | pluralLabel('this pupil', 'each of these pupils') }} is correct in your MIS you must give us an explanation that follows this guide:</h4>
+                    <h4 class="govuk-heading-s">If you are sure the data for {{ issue.pupils | pluralLabel('this pupil', 'each of these pupils') }} is correct in your MIS you must give us an explanation that meets this criteria:</h4>
                     <p>
-                        {{ issue.guide }}
+                        {{ issue.guide | addFullStop }}
                     </p>
 
                 {% endif %}
@@ -133,7 +128,7 @@
 					name: 'response-note',
 					classes: 'govuk-input--width-30',
 					label: {
-						text: 'Explain why you cannot fix this data in your MIS' if isError else 'Explanation'
+						text: 'Explain why you cannot correct this data' if isError else 'Explanation'
 					}
 				}) }}
 
