@@ -241,7 +241,7 @@ module.exports = function(env) {
 	filters.schoolIsReady = school => {
 		var isReady = true
 		school.issues.forEach(issue => {
-			if (issue.isResolved == 'false') {
+			if (issue.isResolved != 'true') {
 				isReady = false
 			}
 		})
@@ -261,7 +261,7 @@ module.exports = function(env) {
 	filters.actionNeededCount = school => {
 		var count = 0
 		school.issues.forEach(issue => {
-			if (issue.isResolved == 'false') {
+			if (issue.isResolved != 'true') {
 				if (issue.pupils) {
 					if (issue.pupils.length > 0) {
 						count += issue.pupils.length
@@ -279,7 +279,7 @@ module.exports = function(env) {
 	filters.issuesArray = school => {
 		var output = []
 		school.issues.forEach(issue => {
-			if (issue.isResolved == 'false') {
+			if (issue.isResolved != 'true') {
 				output.push(issue)
 			}
 		})
@@ -289,7 +289,7 @@ module.exports = function(env) {
 	filters.resolvedArray = school => {
 		var output = []
 		school.issues.forEach(issue => {
-			if (issue.isResolved != 'false') {
+			if (issue.isResolved == 'true') {
 				output.push(issue)
 			}
 		})
@@ -297,12 +297,7 @@ module.exports = function(env) {
 	}
 
 	filters.hasExplanations = school => {
-		school.issues.forEach(issue => {
-			if (issue.isResolved == 'true') {
-				return true
-			}
-		})
-		return false
+		return filters.resolvedArray(school).length > 0
 	}
 
 	filters.countLabel = (count, singleLabel, pluralLabel) => {

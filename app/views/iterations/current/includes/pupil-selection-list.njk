@@ -8,7 +8,7 @@
 {% set hasMultiplePupils = issue.pupils | length > 1 %}
 {% set isError = issue.category == 'error' %}
 
-<form id="pupil-select-form" action="" method="post">
+<form id="pupil-select-form" action="/issue/explain" method="post">
 
     <div class="govuk-grid-row">
 
@@ -132,7 +132,9 @@
 					}
 				}) }}
 
-
+                <input type="hidden" id="selected-issue" name="selected-issue" value="{{ params.issue.id }}">
+                <input type="hidden" name="success-page" value="#root#/school/issue-details">
+                
 				{{ govukButton({
 					html: 'Save explanation'
 				}) }}
@@ -186,10 +188,6 @@
             '.govuk-table__body .govuk-table__checkbox-cell input[type=checkbox]:checked'
         ).length;
 
-        //{% if params.isResolved == false %}
-        $('form').attr('action', selectedCount == maximumCount ? '/add-explanation' : '/add-selected-explanation');
-        //{% endif %}
-        
         if (selectedCount != 0) {
             $('.selected-button').removeClass('govuk-button--disabled');
             $('button.selected-button').prop('disabled', false);

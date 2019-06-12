@@ -142,7 +142,7 @@ module.exports = IssueModifier
  * @param {object} issue - The selected issue
  * @param {string} school - The school object
  * @param {any[]} selectedPupilIds - The selected pupils (null if all pupils are to be included)
- * @returns The modified school object
+ * @returns An object containing the modified school object
  *
  */
 

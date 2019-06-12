@@ -53,6 +53,7 @@
                             <p class="issueData" data-modal-id="modal-description">
                                 {{ issue.description | addFullStop }}
                             </p>
+                            <div class="issueData" data-modal-id="selected-issue" style="display: none;">{{ issue.id }}</div>
                         </th>
                         <td class="govuk-table__cell">
                             <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8 issueCategory">

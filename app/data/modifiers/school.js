@@ -106,17 +106,20 @@ SchoolModifier.getById = (id, data) => {
  */
 
 SchoolModifier.saveChanges = (school, data) => {
+	var outputSchools = []
 	var hasSaved = false
+	data = JSON.parse(JSON.stringify(data))
 	if (Array.isArray(data.schools)) {
 		data.schools.map(savedSchool => {
 			if (school.id == savedSchool.id) {
 				hasSaved = true
-				return school
+				outputSchools.push(school)
 			} else {
-				return savedSchool
+				outputSchools.push(savedSchool)
 			}
 		})
 	}
+	data.schools = outputSchools
 	return { data, hasSaved }
 }
 

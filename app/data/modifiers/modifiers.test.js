@@ -104,7 +104,7 @@ test('modify a school in data', () => {
 	var sample = Generate.randomItemFrom(testData.schools)
 	const newSchoolName = Generate.schoolName()
 	sample.name = newSchoolName
-	SchoolModifier.saveChanges(sample, testData)
+	testData = SchoolModifier.saveChanges(sample, testData).data
 	expect(
 		SchoolModifier.getById(sample.id, testData).name == newSchoolName
 	).toBeTruthy()
@@ -136,7 +136,11 @@ test('add an explanation to a given issue', () => {
 		sampleSchool,
 		null
 	)
-	const modifiedIssue = IssueModifier.getById(sampleIssue.id, modifiedSchool)
+	testData = SchoolModifier.saveChanges(modifiedSchool, testData).data
+	const modifiedIssue = IssueModifier.getById(
+		sampleIssue.id,
+		SchoolModifier.getById(sampleSchool.id, testData)
+	)
 	expect(modifiedIssue).toBeTruthy()
 	expect(
 		modifiedIssue.notes[modifiedIssue.notes.length - 1].author == sampleAuthor
@@ -144,6 +148,7 @@ test('add an explanation to a given issue', () => {
 	expect(
 		modifiedIssue.notes.length == sampleIssue.notes.length + 1
 	).toBeTruthy()
+	expect(sampleSchool.id).toBe(modifiedSchool.id)
 })
 
 test('add an explanation to a given issue for selected pupils', () => {

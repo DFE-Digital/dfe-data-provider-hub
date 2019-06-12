@@ -23,4 +23,7 @@ router.all('*', (req, _, next) => {
 const schoolModifierRoutes = require('./routes/modify-school')
 router.use('/school', schoolModifierRoutes)
 
+const issueModifierRoutes = require('./routes/modify-issue')
+router.use('/issue', issueModifierRoutes)
+
 module.exports = router

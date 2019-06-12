@@ -1,5 +1,5 @@
 {% from "button/macro.njk" import govukButton %}
-{% from "radios/macro.njk" import govukRadios %}
+{% from "warning-text/macro.njk" import govukWarningText %}
 {% from "textarea/macro.njk" import govukTextarea %}
 
 {% macro schoolIssueModal(params) %}
@@ -8,10 +8,9 @@
 <div class="modal" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
 
     {% set responseHTML %}
-        <p class="guide"></p>
         {{ govukTextarea({
-                id: 'reject-reason',
-                name: 'reject-reason',
+                id: 'response-note',
+                name: 'response-note',
                 label: {
                     text: 'Explanation'
                 }
@@ -21,16 +20,20 @@
     <h3 id="modal-title" class="govuk-heading-l govuk-!-margin-bottom-1"></h3>
     <p id="modal-description"></p>
 
-    <form action="/issue/explain">
+    <form action="/issue/explain" method="post">
         <div class="error-content">
-            {{ responseHTML | safe }}
+            {{ govukWarningText({
+                html: 'This data should be corrected in your MIS. We can only accept an explanation for this error in certain cases.' | safe,
+                iconFallbackText: 'Warning'
+            }) }}
         </div>
         
         <div class="query-content">
-            {{ responseHTML | safe }}
+            <p class="guide"></p>
         </div>
-
+        {{ responseHTML | safe }}
         <input type="hidden" id="selected-issue" name="selected-issue">
+        <input type="hidden" name="success-page" value="#root#/school/issues">
         {{ govukButton({
             html: 'Save explanation',
             classes: 'send'
@@ -52,7 +55,12 @@
         var issueCategory = issueRow.find('.issueCategory').text().trim();
         issueRow.find('.issueData').each(function() {
             var id = $(this).attr('data-modal-id');
-            $('#' + id).html($(this).html());
+            var modalElement = $('#' + id);
+            if (modalElement[0].nodeName == 'INPUT' || modalElement[0].nodeName == 'TEXTAREA') {
+                modalElement.val($(this).html());
+            } else {
+                modalElement.html($(this).html());
+            }
         });
         if (issueCategory.toLowerCase() == 'error') {
             $('.error-content').show()

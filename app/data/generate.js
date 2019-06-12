@@ -433,6 +433,7 @@ Generate.errors = (amount, errorArray) => {
 	var output = []
 	errorArray.forEach(error => {
 		error.id = Generate.uuid()
+		error.handled = 'false'
 		output.push(error)
 	})
 	return Generate.randomItemsFrom(output, amount)
