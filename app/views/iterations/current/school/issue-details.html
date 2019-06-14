@@ -31,7 +31,24 @@
                 classes: 'govuk-!-margin-bottom-5'
             }) }}
 
-            <h1 class="govuk-heading-xl">MOVED {{pupilsMoved}}</h1>
+            {% if data.pupilsMoved != 0 %}
+
+                {% set bannerHtml %}
+                    <h2 class="govuk-heading-m">{{ data.pupilsMoved | countLabel('pupil', 'pupils') }} {{'moved to <a href="responses">‘saved explanations’' | safe if not isResolved else 'removed from ‘saved explanations’'}}</a></h2>
+                    {% set remainingPupils = issue.pupils | length %}
+                    {% if not isResolved %}
+                        <p>You need to explain this {{ query.category }} for {{remainingPupils}} more pupil{{ 's' if remainingPupils > 1 }}.</p>
+                    {% else %}
+                        <p>You will find {{ 'these pupils' if remainingPupils > 1 else 'this pupil'}} in <a href="queries">issues to resolve</a>.</p>
+                    {% endif %}
+                {% endset %}
+
+                {{ hmctsBanner({
+                html: bannerHtml
+                }) }} 
+
+            {% endif %}
+
             <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
                 {{ issue.number }}
                 <span class="type-tag {{ issue.category }} govuk-!-margin-left-2 govuk-body">

@@ -10,11 +10,11 @@ router.post('/explain', (req, res) => {
 	const selectedSchoolId = Helper.getValue('selected-school', req)
 	const selectedIssue = Helper.getValue('selected-issue', req)
 	const explanation = Helper.getValue('response-note', req)
-	var selectedPupils = null
+	var selectedPupils = []
 	if (Array.isArray(req.body['selected-pupils'])) {
 		selectedPupils = req.body['selected-pupils']
-		res.body.movedPupils = selectedPupils.length
 	}
+	req.session.data.pupilsMoved = selectedPupils.length
 	var school = Helper.getSchoolById(selectedSchoolId, req)
 	var modifiedSchool = IssueModifier.addExplanation(
 		selectedIssue,

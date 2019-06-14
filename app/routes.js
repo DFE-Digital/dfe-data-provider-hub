@@ -17,6 +17,7 @@ router.post('*', (req, res, next) => {
 // Save page load time to 'time' variable
 router.all('*', (req, _, next) => {
 	set(req.session.data, 'time', new Date().getTime())
+	set(req.session.data, 'pupilsMoved', '0')
 	next()
 })
 

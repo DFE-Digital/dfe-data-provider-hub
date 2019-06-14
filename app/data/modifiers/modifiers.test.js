@@ -134,7 +134,7 @@ test('add an explanation to a given issue', () => {
 		sampleIssue.id,
 		'This is a test',
 		sampleSchool,
-		null
+		sampleIssue.pupils ? sampleIssue.pupils.map(pupil => pupil.id) : null
 	)
 	testData = SchoolModifier.saveChanges(modifiedSchool, testData).data
 	const modifiedIssue = IssueModifier.getById(
@@ -167,13 +167,14 @@ test('add an explanation to a given issue for selected pupils', () => {
 		sampleSchool,
 		[selectedPupils[0].id, selectedPupils[1].id]
 	)
-	const modifiedIssue = IssueModifier.getById(sampleIssue.id, modifiedSchool)
-	expect(modifiedIssue).toBeTruthy()
+	const modifiedIssue = modifiedSchool.issues.find(
+		issue => issue.isResolved == 'true'
+	)
 	expect(
 		modifiedIssue.notes[modifiedIssue.notes.length - 1].author == sampleAuthor
 	).toBeTruthy()
 	expect(sampleIssue.pupils.length).toBe(10)
-	expect(modifiedIssue.pupils.length).toBe(8)
+	expect(modifiedIssue.pupils.length).toBe(2)
 	expect(
 		modifiedSchool.issues.find(issue => issue.isResolved == 'true').pupils
 			.length
@@ -181,6 +182,32 @@ test('add an explanation to a given issue for selected pupils', () => {
 	expect(
 		modifiedIssue.notes.length == sampleIssue.notes.length + 1
 	).toBeTruthy()
+})
+
+test('add an explanation but with no pupils selected', () => {
+	var testData = {}
+	testData.schools = Generate.schools(6)
+	const sampleSchool = SchoolModifier.buildSchoolIfNecessary(
+		Generate.randomItemFrom(testData.schools)
+	)
+	var sampleIssue = Generate.randomItemFrom(sampleSchool.issues)
+	sampleIssue.pupils = Generate.pupils(10)
+	const selectedPupils = null
+	const sampleAuthor = sampleSchool.provider
+	const modifiedSchool = IssueModifier.addExplanation(
+		sampleIssue.id,
+		'This is a test',
+		sampleSchool,
+		selectedPupils
+	)
+	testData = SchoolModifier.saveChanges(modifiedSchool, testData).data
+	const modifiedIssue = IssueModifier.getById(
+		sampleIssue.id,
+		SchoolModifier.getById(sampleSchool.id, testData)
+	)
+	expect(sampleIssue.pupils.length).toBe(10)
+	expect(modifiedIssue.pupils.length).toBe(10)
+	expect(modifiedIssue.notes.length).toBe(sampleIssue.notes.length)
 })
 
 test('add an explanation to a given issue if all pupils are selected', () => {
@@ -227,7 +254,7 @@ test('undo an explanation to a given issue for selected pupils', () => {
 		sampleIssue.id,
 		'This is a test',
 		sampleSchool,
-		null
+		sampleIssue.pupils.map(issue => issue.id)
 	)
 	const modifiedIssue = IssueModifier.getById(sampleIssue.id, modifiedSchool)
 	expect(modifiedIssue).toBeTruthy()
@@ -248,10 +275,6 @@ test('undo an explanation to a given issue for selected pupils', () => {
 		modifiedSchool,
 		[selectedPupils[0].id, selectedPupils[1].id]
 	)
-	const modifiedIssueAfterUndo = IssueModifier.getById(
-		sampleIssue.id,
-		modifiedSchoolAfterUndo
-	)
 	expect(modifiedSchoolAfterUndo.issues.length).toBe(
 		modifiedSchool.issues.length + 1
 	)
@@ -270,7 +293,7 @@ test('undo an explanation to a given issue when all pupils are selected', () => 
 		sampleIssue.id,
 		'This is a test',
 		sampleSchool,
-		null
+		sampleIssue.pupils.map(issue => issue.id)
 	)
 	const modifiedIssue = IssueModifier.getById(sampleIssue.id, modifiedSchool)
 	expect(modifiedIssue).toBeTruthy()

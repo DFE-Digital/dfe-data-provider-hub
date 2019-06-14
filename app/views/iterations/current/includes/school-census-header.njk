@@ -5,7 +5,7 @@
     <div class="govuk-grid-column-one-half">
         {% if params.school.issues | length == 0 %}
             <script>
-                window.location.href = 'no-issues'
+                window.location.href = 'census-data'
             </script>
         {% else %}
             {% if params.isReady %}
@@ -25,7 +25,7 @@
                     classes: ''
                 }) }}
             {% else %}
-                <h1 class="govuk-heading-l">Explain the issues in your data</h1>
+                <h1 class="govuk-heading-l">Explain the errors and queries in your data</h1>
                 <p>
                 There are some errors and queries with the census data you have sent us.
                 </p>

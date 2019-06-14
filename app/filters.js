@@ -258,6 +258,16 @@ module.exports = function(env) {
 		return hasNotes
 	}
 
+	filters.hasPreviousNotes = issues => {
+		var hasNotes = false
+		issues.forEach(issue => {
+			if (issue.notes.length > 1) {
+				hasNotes = true
+			}
+		})
+		return hasNotes
+	}
+
 	filters.actionNeededCount = school => {
 		var count = 0
 		school.issues.forEach(issue => {
@@ -326,6 +336,12 @@ module.exports = function(env) {
 		} else {
 			return nil
 		}
+	}
+
+	filters.getURLParameter = (urlString, parameter) => {
+		var url = new URL(urlString)
+		var value = url.searchParams.get(parameter)
+		return value
 	}
 
 	filters.randomSchool = () => {

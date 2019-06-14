@@ -16,6 +16,7 @@ const IssueModifier = {}
  */
 
 const notesAddingNew = (notes, noteContent, author) => {
+	notes = JSON.parse(JSON.stringify(notes))
 	const newNote = {
 		type: 'school',
 		author: author,
@@ -31,6 +32,7 @@ const notesAddingNew = (notes, noteContent, author) => {
 }
 
 const notesRemovingLast = notes => {
+	notes = JSON.parse(JSON.stringify(notes))
 	if (Array.isArray(notes)) {
 		notes.pop()
 	} else {
@@ -55,7 +57,7 @@ IssueModifier.getById = (id, school) => {
  * @param {object} issue - The selected issue
  * @param {string} explanation - The explanation content
  * @param {string} school - The school object
- * @param {any[]} selectedPupilIds - The selected pupils (null if all pupils are to be included)
+ * @param {any[]} selectedPupilIds - The selected pupils
  * @returns The modified school object
  *
  */
@@ -67,50 +69,55 @@ IssueModifier.addExplanation = (
 	selectedPupilIds
 ) => {
 	var outputIssues = []
-
+	selectedPupilIds = selectedPupilIds || []
 	if (school) {
 		school = JSON.parse(JSON.stringify(school))
 		school.issues.forEach(issue => {
 			if (issue.id == issueId) {
 				// If issue is currently modifying issue
 				if (Array.isArray(issue.pupils)) {
-					var remainingPupils = []
-					var leavingPupils = []
-					if (selectedPupilIds == null || selectedPupilIds.length == 0) {
-						leavingPupils = issue.pupils
-					} else {
-						issue.pupils.forEach(pupil => {
-							if (selectedPupilIds.includes(pupil.id)) {
-								leavingPupils.push(pupil)
-							} else {
-								remainingPupils.push(pupil)
-							}
-						})
-					}
-					if (remainingPupils.length == 0) {
-						// If all pupils are leaving the whole issue will be resolved
-						issue.notes = notesAddingNew(
-							issue.notes,
-							explanation,
-							school.provider
-						)
-						issue.isResolved = 'true'
+					if (selectedPupilIds.length == 0) {
+						// No pupils selected, save with no changes
 						outputIssues.push(issue)
 					} else {
-						// Save existing issue with any remaining pupils
-						issue.pupils = remainingPupils
-						outputIssues.push(issue)
+						var remainingPupils = []
+						var leavingPupils = []
+						if (selectedPupilIds.length == 0) {
+							leavingPupils = issue.pupils
+						} else {
+							issue.pupils.forEach(pupil => {
+								if (selectedPupilIds.includes(pupil.id)) {
+									leavingPupils.push(pupil)
+								} else {
+									remainingPupils.push(pupil)
+								}
+							})
+						}
+						if (remainingPupils.length == 0) {
+							// If all pupils are leaving the whole issue will be resolved
+							issue.notes = notesAddingNew(
+								issue.notes,
+								explanation,
+								school.provider
+							)
+							issue.isResolved = 'true'
+							outputIssues.push(issue)
+						} else {
+							// Save existing issue with any remaining pupils
+							issue.pupils = remainingPupils
+							outputIssues.push(issue)
 
-						var createdIssue = JSON.parse(JSON.stringify(issue))
-						createdIssue.id = Generate.uuid()
-						createdIssue.notes = notesAddingNew(
-							issue.notes,
-							explanation,
-							school.provider
-						)
-						createdIssue.isResolved = 'true'
-						createdIssue.pupils = leavingPupils
-						outputIssues.push(createdIssue)
+							var createdIssue = JSON.parse(JSON.stringify(issue))
+							createdIssue.id = Generate.uuid()
+							createdIssue.notes = notesAddingNew(
+								issue.notes,
+								explanation,
+								school.provider
+							)
+							createdIssue.isResolved = 'true'
+							createdIssue.pupils = leavingPupils
+							outputIssues.push(createdIssue)
+						}
 					}
 				} else {
 					issue.notes = notesAddingNew(
