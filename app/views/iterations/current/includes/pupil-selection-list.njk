@@ -132,6 +132,9 @@
 					}
 				}) }}
 
+                {% if not hasMultiplePupils %}
+                    <input type="hidden" id="selected-pupils" name="selected-pupils[0]" value="{{ params.issue.pupils[0].id }}">
+                {% endif %}
                 <input type="hidden" id="selected-issue" name="selected-issue" value="{{ params.issue.id }}">
                 <input type="hidden" name="success-page" value="#root#/school/issue-details">
                 

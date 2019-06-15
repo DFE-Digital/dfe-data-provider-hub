@@ -81,9 +81,9 @@
                                 {% if issue.pupils | length != 0 %}
                                     <form action="issue-details">
                                         <input type="hidden" name="current-issue" value="{{ issue.id }}">
-                                        <button type="submit" class="govuk-button">
-                                            Explain
-                                        </button>
+                                        {{ govukButton({
+                                            html: 'Explain'
+                                        }) }}
                                     </form>
                                 {% else %}
                                 <button type="button" class="govuk-button open-modal">

@@ -150,3 +150,50 @@ a.plain-link,
 .plain-link a {
 	text-decoration: none;
 }
+
+// Allow different colours for form buttons
+
+.app-button-red {
+	background-color: govuk-colour('red');
+	box-shadow: 0 2px 0 darken(govuk-colour('red'), 20%);
+
+	&[disabled],
+	&.govuk-button--disabled {
+		pointer-events: none;
+		background-color: rgba(govuk-colour('red'), 50%);
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: darken(govuk-colour('red'), 10%);
+		box-shadow: 0 2px 0 darken(govuk-colour('red'), 20%);
+
+		&[disabled],
+		&.govuk-button--disabled {
+			background-color: rgba(govuk-colour('red'), 50%);
+		}
+	}
+}
+
+.app-button-orange {
+	background-color: govuk-colour('orange');
+	box-shadow: 0 2px 0 darken(govuk-colour('orange'), 20%);
+
+	&[disabled],
+	&.govuk-button--disabled {
+		pointer-events: none;
+		background-color: rgba(govuk-colour('orange'), 50%);
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: darken(govuk-colour('orange'), 10%);
+		box-shadow: 0 2px 0 darken(govuk-colour('orange'), 20%);
+		&[disabled],
+		&.govuk-button--disabled {
+			background-color: rgba(govuk-colour('orange'), 50%);
+		}
+	}
+}
