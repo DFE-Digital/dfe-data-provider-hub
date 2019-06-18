@@ -16,6 +16,13 @@
 
 {% block postHeader %}
 
+    {# Redirect user back to 'issues' if the last explanation has been undone #}
+    {% if school | resolvedArray | length == 0 %}
+
+        {{ 'issues' | redirect | safe }}    
+
+    {% endif %}
+
     {{ schoolIdentityBar({
         school: school,
         isReady: isReady
@@ -24,6 +31,8 @@
 {% endblock %}
 
 {% block content %}
+
+    {{ school | resolvedArray | debug | log }}
 
     {{ schoolCensusHeader({
         school: school,

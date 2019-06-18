@@ -18,6 +18,7 @@ router.post('*', (req, res, next) => {
 router.all('*', (req, _, next) => {
 	set(req.session.data, 'time', new Date().getTime())
 	set(req.session.data, 'pupilsMoved', '0')
+	set(req.session.data, 'issueMoved', 'false')
 	next()
 })
 

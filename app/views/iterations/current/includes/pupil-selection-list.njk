@@ -8,7 +8,7 @@
 {% set hasMultiplePupils = issue.pupils | length > 1 %}
 {% set isError = issue.category == 'error' %}
 
-<form id="pupil-select-form" action="/issue/explain" method="post">
+<form id="pupil-select-form" action="{{ '/issue/undo-explanation' if params.isResolved else '/issue/explain' }}" method="post">
 
     <div class="govuk-grid-row">
 
@@ -82,6 +82,10 @@
                 </tbody>
             </table>
 
+            {% if not hasMultiplePupils %}
+                <input type="hidden" id="selected-pupils" name="selected-pupils[0]" value="{{ params.issue.pupils[0].id }}">
+            {% endif %}
+
         </div>
 
     </div>
@@ -132,9 +136,6 @@
 					}
 				}) }}
 
-                {% if not hasMultiplePupils %}
-                    <input type="hidden" id="selected-pupils" name="selected-pupils[0]" value="{{ params.issue.pupils[0].id }}">
-                {% endif %}
                 <input type="hidden" id="selected-issue" name="selected-issue" value="{{ params.issue.id }}">
                 <input type="hidden" name="success-page" value="#root#/school/issue-details">
                 

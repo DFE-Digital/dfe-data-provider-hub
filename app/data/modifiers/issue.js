@@ -160,47 +160,69 @@ IssueModifier.undoExplanation = (issueId, school, selectedPupilIds) => {
 		school = JSON.parse(JSON.stringify(school))
 
 		var unResolvedIssueId = null
+		var hasPupils = false
 		var remainingPupils = []
 		var leavingPupils = []
 		const selectedIssue = IssueModifier.getById(issueId, school)
 
 		if (Array.isArray(selectedIssue.pupils)) {
-			if (selectedPupilIds == null || selectedPupilIds.length == 0) {
-				leavingPupils = selectedIssue.pupils
-			} else {
-				selectedIssue.pupils.forEach(pupil => {
-					if (selectedPupilIds.includes(pupil.id)) {
-						leavingPupils.push(pupil)
-					} else {
-						remainingPupils.push(pupil)
-					}
-				})
-			}
+			hasPupils = true
+			selectedIssue.pupils.forEach(pupil => {
+				if (selectedPupilIds.includes(pupil.id)) {
+					leavingPupils.push(pupil)
+				} else {
+					remainingPupils.push(pupil)
+				}
+			})
 		}
 		school.issues.forEach(issue => {
 			if (issue.isResolved != 'true' && issue.number == selectedIssue.number) {
-				unResolvedIssue = issue.id
+				unResolvedIssueId = issue.id
 			}
 		})
 		school.issues.forEach(issue => {
+			var issue = JSON.parse(JSON.stringify(issue))
 			if (unResolvedIssueId) {
 				if (issue.id == unResolvedIssueId) {
-					issue.pupils = leavingPupils
-					outputIssues.push(issue)
+					if (hasPupils && selectedPupilIds.length == 0) {
+						// No pupils selected, save with no changes
+						outputIssues.push(issue)
+					} else {
+						issue.pupils = leavingPupils
+						outputIssues.push(issue)
+						console.log('pushed leaving pupils to existing issue')
+					}
 				}
 			}
 			if (issue.id == issueId) {
-				if (remainingPupils.length != 0) {
-					issue.pupils = remainingPupils
+				if (!hasPupils) {
+					issue.notes = notesRemovingLast(issue.notes)
+					issue.isResolved = 'false'
 					outputIssues.push(issue)
-				}
-				if (!unResolvedIssueId) {
-					var createdIssue = JSON.parse(JSON.stringify(issue))
-					createdIssue.id = Generate.uuid()
-					createdIssue.notes = notesRemovingLast(createdIssue.notes)
-					createdIssue.isResolved = false
-					createdIssue.pupils = leavingPupils
-					outputIssues.push(createdIssue)
+					console.log('non-pupil issue updated with undo action')
+				} else {
+					if (selectedPupilIds.length == 0) {
+						// No pupils selected, save with no changes
+						outputIssues.push(issue)
+						console.log('no pupils selected')
+					} else {
+						if (remainingPupils.length != 0) {
+							issue.pupils = remainingPupils
+							outputIssues.push(issue)
+							console.log('updated existing issue with remaining pupils')
+						}
+						if (unResolvedIssueId == null) {
+							var createdIssue = JSON.parse(JSON.stringify(issue))
+							createdIssue.id = Generate.uuid()
+							createdIssue.notes = notesRemovingLast(createdIssue.notes)
+							createdIssue.isResolved = 'false'
+							createdIssue.pupils = leavingPupils
+							outputIssues.push(createdIssue)
+							console.log(
+								'created brand new issue with leaving pupils attached'
+							)
+						}
+					}
 				}
 			} else {
 				// If issue is not affected add to output array

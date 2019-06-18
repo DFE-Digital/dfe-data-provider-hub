@@ -356,6 +356,10 @@ module.exports = function(env) {
 		return generate.phoneNumber()
 	}
 
+	filters.redirect = location => {
+		return `<script>window.location.href = '${location}';</script>`
+	}
+
 	/* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */

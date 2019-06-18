@@ -40,16 +40,6 @@
                         <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
                             <h3 class="govuk-heading-m govuk-!-margin-bottom-1 issueData" data-modal-id="modal-title">
                                 {{ issue.number }}
-                                {% if issue.pupils | length > 0 %}
-                                    <span class="no-wrap type-tag count  govuk-!-margin-left-2">
-                                        {% if issue.pupils | length != 1 %}
-                                            {{ issue.pupils | length }} pupils
-                                            {% set consolidatedQuery = true %}
-                                        {% else %}
-                                            1 pupil
-                                        {% endif %}
-                                    </span>
-                                {% endif %}
                             </h3>
                             <p class="issueData" data-modal-id="modal-description">
                                 {{ issue.description | addFullStop }}
@@ -76,7 +66,7 @@
                                 {% endif %}
                                 <p>{{ currentNote.text }}</p>
                             </div>
-                            <form action="issue-details">
+                            <form action="{{ 'issue-details' if issue.pupils | length > 0 else '/issue/undo-explanation' }}" method="post">
                                 <input type="hidden" name="current-issue" value="{{ issue.id }}">
                                 {{ govukButton({
                                     html: 'Undo explanation',
