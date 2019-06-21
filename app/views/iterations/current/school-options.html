@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block pageTitle %}
+    Configure prototype
+{% endblock %}
+
+{% set school = data.schools[0] %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-two-thirds">
+
+            {{ govukBackLink({
+                text: 'Back',
+                href: 'javascript:history.back()'
+            }) }}
+
+            <form action="/school/modify" method="post">
+
+                <h1 class="govuk-heading-xl">Configure prototype</h1>
+
+                {{ govukInput({
+                    id: 'set-school-name',
+                    name: 'set-school-name',
+                    value: school.name,
+                    label: {
+                        text: 'School name'
+                    },
+                    classes: 'govuk-input--width-20'
+                }) }}
+
+                {{ govukInput({
+                    id: 'set-school-user-name',
+                    name: 'set-school-user-name',
+                    value: school.provider,
+                    label: {
+                        text: 'School data provider’s name'
+                    },
+                    classes: 'govuk-input--width-20'
+                }) }}
+
+                {{ govukInput({
+                    id: 'set-number-of-queries',
+                    name: 'set-number-of-queries',
+                    value: school.noOfQueries if school.noOfQueries else '0',
+                    type: 'number',
+                    label: {
+                        text: 'Number of queries'
+                    },
+                    classes: 'govuk-input--width-5'
+                }) }}
+
+                {{ govukInput({
+                    id: 'set-number-of-errors',
+                    name: 'set-number-of-errors',
+                    value: school.noOfErrors if school.noOfErrors else '0',
+                    type: 'number',
+                    label: {
+                        text: 'Number of errors'
+                    },
+                    classes: 'govuk-input--width-5'
+                }) }}
+
+                <input type="hidden" name="user-type" value="school">
+
+                <input type="hidden" name="selected-school" value="{{ school.id }}">
+
+                <input type="hidden" name="success-page" value="#root#/school/issues">
+
+                {{ govukButton({
+                    html: 'Save and continue'
+                }) }}
+
+            </form>
+
+        </div>
+
+</div>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,29 @@
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-sub-navigation/macro.njk' import hmctsSubNavigation %}
+{% macro helpdeskQueueSubNavigation(params) %}
+{{ hmctsSubNavigation({
+    label: 'Sub navigation',
+    items: [
+        {
+            html: 'Inbox' + params.schools | filterByStatus('submitted') | length | countTag,
+            href: 'inbox',
+            active: params.activePage == 'inbox'
+        } if not params.isReady, 
+        {
+            html: 'Responded' + params.schools | filterByStatus('responded') | length | countTag,
+            href: 'responded',
+            active: params.activePage == 'responded'
+        },
+        {
+            html: 'Not sent' + ((params.schools | filterByStatus('no-data') | length) + (params.schools | filterByStatus('no-explanations') | length)) | countTag,
+            href: 'not-sent',
+            active: params.activePage == 'not-sent'
+        },
+        {
+            html: 'All schools in queue',
+            href: 'all-schools',
+            active: params.activePage == 'all-schools'
+        }
+    ]
+}) }} 
+{% endmacro %}

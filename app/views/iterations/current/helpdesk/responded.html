@@ -1,0 +1,34 @@
+{% from "./../includes/helpdesk-queue-navigation.njk" import helpdeskQueueSubNavigation %}
+{% from "./../includes/school-selection-list.njk" import schoolSelectionList %}
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    My work queue
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <div class="app-inline-title">
+                <h1 class="govuk-heading-l">{{ data.user }}’s queue</h1>
+                <p><a href="#">Change queue</a></p>
+            </div>
+        </div>
+    </div>
+
+    {{ helpdeskQueueSubNavigation({
+        activePage: 'responded',
+        schools: data.schools
+    }) }}
+
+    {{ schoolSelectionList({
+        type: 'responded',
+        schools: data.schools | filterByStatus('responded')
+    }) }}
+
+{% endblock %}
+
+
+

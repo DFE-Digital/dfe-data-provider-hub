@@ -41,7 +41,7 @@ $('form[action*=\\#root\\#]').each((_, form) => {
 
 // Remove blank links from HMCTS navigation
 
-$('.hmcts-sub-navigation__link').each((_, input) => {
+$('.hmcts-sub-navigation__link, .hmcts-pagination__link').each((_, input) => {
 	if (
 		$(input)
 			.text()
@@ -83,3 +83,38 @@ if (navModalEl && modalOverlay) {
 // Make all links retain state when visited
 
 $('a[href]').addClass('govuk-link--no-visited-state')
+
+// Choose next page based on radio option selection
+
+const nextPageBasedOnSelection = $radioObject => {
+	if (nextPageRoutes) {
+		for (let index = 0; index < Object.keys(nextPageRoutes).length; index++) {
+			var checkboxValue = $radioObject.val()
+			if (nextPageRoutes[checkboxValue] != undefined) {
+				var nextPageField = null
+				if ($('#next-page').length) {
+					nextPageField = $('#next-page')
+				} else {
+					nextPageField = $(
+						'<input type="hidden" id="next-page" name="next-page">'
+					)
+					$('button[type=submit]').before(nextPageField)
+				}
+				nextPageField.val(nextPageRoutes[checkboxValue])
+				break
+			} else {
+				$('#next-page').remove()
+			}
+		}
+	}
+}
+
+$('input[type=radio]').on('change', () => {
+	try {
+		$('input[type=radio]:checked').each((_, element) => {
+			nextPageBasedOnSelection($(element))
+		})
+	} catch (e) {
+		console.error(e)
+	}
+})

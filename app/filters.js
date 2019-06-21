@@ -232,6 +232,15 @@ module.exports = function(env) {
 		return JSON.stringify(obj)
 	}
 
+	filters.pageResults = (array, page) => {
+		const pageNo = parseInt(page)
+		return array.slice((pageNo - 1) * 50, pageNo * 50 + 49)
+	}
+
+	filters.friendlyStatus = statusType => {
+		return filters.sentenceCase(statusType.replace('-', ' '))
+	}
+
 	filters.getById = (array, str) => {
 		return array.find(obj => {
 			return obj.id.toString() === str
@@ -286,6 +295,15 @@ module.exports = function(env) {
 		return count
 	}
 
+	filters.filterByStatus = (schools, status) => {
+		if (Array.isArray(status)) {
+			return schools.filter(
+				school => school.status == status[0] || school.status == status[1]
+			)
+		}
+		return schools.filter(school => school.status == status)
+	}
+
 	filters.issuesArray = school => {
 		var output = []
 		school.issues.forEach(issue => {
@@ -317,6 +335,12 @@ module.exports = function(env) {
 			return `${filters.friendlyNumber(count)} ${pluralLabel}`
 		}
 		return `0 ${pluralLabel}`
+	}
+
+	filters.countTag = count => {
+		return `<span class="app-count-tag">${
+			count == 0 ? 0 : filters.friendlyNumber(count)
+		}</span>`
 	}
 
 	filters.pluralLabel = (count, singleLabel, pluralLabel) => {

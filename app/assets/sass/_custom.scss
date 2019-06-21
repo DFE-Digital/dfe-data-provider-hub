@@ -77,7 +77,7 @@ a.type-tag,
 	}
 }
 
-// Alight cell content to top of cells within given table
+// Align cell content to top of cells within given table
 
 table.govuk-table--top-align {
 	th,
@@ -86,9 +86,14 @@ table.govuk-table--top-align {
 	}
 }
 
-// Make buttons smaller when within a table
+// Make objects smaller when within a table
 
 table .govuk-button {
+	font-size: 16px;
+}
+
+tbody th,
+tbody td {
 	font-size: 16px;
 }
 
@@ -196,4 +201,43 @@ a.plain-link,
 			background-color: rgba(govuk-colour('orange'), 50%);
 		}
 	}
+}
+
+// Style 'count tags' where navigation elements show the number of underlying records
+
+a .app-count-tag,
+.app-count-tag {
+	display: inline-block;
+	text-decoration: none;
+	font-weight: bold;
+	color: $govuk-brand-colour;
+	border: $govuk-brand-colour 1.5px solid;
+	border-radius: 3px;
+	padding: 1.5px 4px 0 4px;
+	font-size: 80%;
+	margin-left: 8px;
+}
+
+// Allow for titles containing a suffixed element
+
+.app-inline-title {
+	vertical-align: baseline;
+
+	* {
+		margin-right: 8px;
+		display: inline-block;
+	}
+}
+
+// Style tags
+
+.hmcts-badge {
+	border-radius: 3px;
+	padding-top: 2.5px;
+}
+
+// Remove underline from plain links
+
+.app-plain-link {
+	text-decoration: none;
 }

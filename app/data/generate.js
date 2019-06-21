@@ -314,11 +314,13 @@ Generate.schoolName = () => {
  * @param {string} laCode
  * @param {string} type
  * @param {number} noOfQueries
+ * @param {number} noOfErrors
+ * @param {string} status
  * @returns A school object
  *
  */
 
-Generate.newSchool = (name, laCode, type, noOfQueries, noOfErrors) => {
+Generate.newSchool = (name, laCode, type, noOfQueries, noOfErrors, status) => {
 	return {
 		name,
 		type,
@@ -327,7 +329,8 @@ Generate.newSchool = (name, laCode, type, noOfQueries, noOfErrors) => {
 		LAESTAB: laCode.toString() + '/' + Generate.randomCode(4),
 		hasBuilt: false,
 		issues: [],
-		provider: Generate.name()
+		provider: Generate.name(),
+		status
 	}
 }
 
@@ -344,10 +347,38 @@ Generate.newSchool = (name, laCode, type, noOfQueries, noOfErrors) => {
 Generate.school = () => {
 	return Generate.newSchool(
 		Generate.schoolName(),
-		Generate.randomCode(3),
+		Generate.randomItemFrom(
+			require('./simulated-data/local-authorities').map(la => la.code)
+		),
 		Generate.randomItemFrom(['academy', 'maintained', 'maintained']),
-		Generate.randomNumber(0, 25),
-		Generate.randomNumber(0, 3)
+		Generate.randomNumber(1, 25),
+		Generate.randomNumber(0, 3),
+		Generate.randomItemFrom([
+			'submitted',
+			'submitted',
+			'responded',
+			'authorised',
+			'authorised',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-data',
+			'no-explanations',
+			'no-explanations',
+			'no-explanations'
+		])
 	)
 }
 
@@ -366,7 +397,14 @@ Generate.schools = amount => {
 	return new Array(amount).fill(null).map(() => {
 		const school = Generate.school()
 		school.id = Generate.uuid()
-		school.submittedDate = Generate.randomDate(5, 1)
+		if (school.status == 'submitted') {
+			school.submittedDate = Generate.randomDate(5, 1)
+		} else if (school.status == 'responded') {
+			school.submittedDate = Generate.randomDate(7, 4)
+			school.respondedDate = Generate.randomDate(3, 1)
+		} else if (school.status == 'no-explanations') {
+			school.dataSentDate = Generate.randomDate(10, 1)
+		}
 		return school
 	})
 }

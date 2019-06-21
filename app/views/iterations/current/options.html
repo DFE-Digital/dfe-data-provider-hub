@@ -1,10 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block pageTitle %}
-    Configure prototype
+    Select prototype user type
 {% endblock %}
-
-{% set school = data.schools[0] %}
 
 {% block content %}
 
@@ -17,57 +15,45 @@
                 href: 'javascript:history.back()'
             }) }}
 
-            <form action="/school/modify" method="post">
+            <form method="post">
 
-                <h1 class="govuk-heading-xl">Configure prototype</h1>
+                {% set usersNameHTML %}
 
-                {{ govukInput({
-                    id: 'set-school-name',
-                    name: 'set-school-name',
-                    value: school.name,
-                    label: {
-                        text: 'School name'
+                    {{ govukInput({
+                        id: 'user',
+                        name: 'user',
+                        value: data['user'] if data['user'] else '',
+                        classes: 'govuk-input--width-20',
+                        label: {
+                            text: 'User’s name',
+                            classes: 'govuk-input--width-20'
+                        }
+                    }) }}
+
+                {% endset %}
+
+                {{ govukRadios({
+                    idPrefix: 'user-type',
+                    name: 'user-type',
+                    fieldset: {
+                        legend: {
+                            text: 'Select prototype user type',
+                            isPageHeading: true,
+                            classes: 'govuk-fieldset__legend--xl'
+                        }
                     },
-                    classes: 'govuk-input--width-20'
+                    items: [
+                     {
+                            text: 'School',
+                            value: 'school'
+                        },
+                        {
+                            text: 'Collector',
+                            value: 'collector',
+                            conditional : { html: usersNameHTML }
+                        }
+                    ]
                 }) }}
-
-                {{ govukInput({
-                    id: 'set-school-user-name',
-                    name: 'set-school-user-name',
-                    value: school.provider,
-                    label: {
-                        text: 'School data provider’s name'
-                    },
-                    classes: 'govuk-input--width-20'
-                }) }}
-
-                {{ govukInput({
-                    id: 'set-number-of-queries',
-                    name: 'set-number-of-queries',
-                    value: school.noOfQueries if school.noOfQueries else '0',
-                    type: 'number',
-                    label: {
-                        text: 'Number of queries'
-                    },
-                    classes: 'govuk-input--width-5'
-                }) }}
-
-                {{ govukInput({
-                    id: 'set-number-of-errors',
-                    name: 'set-number-of-errors',
-                    value: school.noOfErrors if school.noOfErrors else '0',
-                    type: 'number',
-                    label: {
-                        text: 'Number of errors'
-                    },
-                    classes: 'govuk-input--width-5'
-                }) }}
-
-                <input type="hidden" name="user-type" value="school">
-
-                <input type="hidden" name="selected-school" value="{{ school.id }}">
-
-                <input type="hidden" name="success-page" value="#root#/school/issues">
 
                 {{ govukButton({
                     html: 'Save and continue'
@@ -78,6 +64,15 @@
         </div>
 
 </div>
+
+<script>
+
+    var nextPageRoutes = {
+        school: 'school-options',
+        collector: 'helpdesk/inbox'
+    }
+
+</script>
 
 {% endblock %}
 

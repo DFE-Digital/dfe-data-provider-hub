@@ -1,0 +1,183 @@
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-badge/macro.njk' import hmctsBadge %}
+{% from hmctsComponentRoot + 'hmcts-pagination/macro.njk' import hmctsPagination %}
+{% from "button/macro.njk" import govukButton %}
+{% macro schoolSelectionList(params) %}
+
+{% set schoolArray = params.schools %}
+
+{% if params.type == 'inbox' %}
+    {% set schoolArray = params.schools | sort(false, true, 'submittedDate') %}
+{% endif %}
+
+{% if params.type == 'responded' %}
+    {% set schoolArray = params.schools | sort(false, true, 'respondedDate') %}
+{% endif %}
+
+{% if params.type == 'not-sent' %}
+    {% set schoolArray = params.schools  | sort(false, true, 'dataSentDate')  | sort(true, true, 'status')%}
+{% endif %}
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-full">
+
+        {% set paginationHTML %}
+
+            {% if (schoolArray | length > 49) %}
+                {{ hmctsPagination({
+                    results: {
+                        from: 1,
+                        to: 50 if (schoolArray | length > 50) else schoolArray | length,
+                        count: schoolArray | length | friendlyNumber
+                    },
+                    next: {
+                        text: 'Next',
+                        href: '#'
+                    },
+                    items: [
+                        {
+                            text: '1',
+                            href: '#',
+                            selected: true
+                        }, {
+                            text: '2',
+                            href: '#'
+                        } if (schoolArray | length > ((2 - 1) * 50)), {
+                            text: '3',
+                            href: '#'
+                        } if (schoolArray | length > ((3 - 1) * 50)), {
+                            text: '4',
+                            href: '#'
+                        } if (schoolArray | length > ((4 - 1) * 50)), {
+                            text: '5',
+                            href: '#'
+                        } if (schoolArray | length > ((5 - 1) * 50))
+                    ]
+                }) }} 
+            {% endif %}
+
+        {% endset %}
+
+        {{ paginationHTML | safe }}
+
+        <table id="issueTable" class="govuk-table hide-caption">
+            
+            <caption class="govuk-table__caption">Issues</caption>
+            
+            
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                
+                    <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Name</span></th>
+                    
+                    <th class="govuk-table__header govuk-table__header--numeric" scope="col" aria-sort="none"><span class="no-wrap">LAESTAB</span></th>
+
+
+                    {% if not params.isExternal %}
+                        <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Type</span></th>
+                    {% endif %}
+
+                    {% if params.type == 'all' %}
+                        <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Status</span></th>
+                    {% endif %}
+
+                        {% if params.type == 'inbox' %}
+                            <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Submitted</span></th>
+                        {% endif %}
+                        
+                        {% if params.type == 'responded' %}
+                            <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Responses sent</span></th>
+                        {% endif %}
+
+                        {% if params.type == 'not-sent' %}
+                            <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Data sent</span></th>
+                        {% endif %}
+
+                    <th class="govuk-table__header govuk-table__header--numeric" scope="col" aria-sort="none"><span class="no-wrap">{{ 'Outstanding errors' if params.type == 'responded' else 'Errors' }}</span></th>
+
+                    <th class="govuk-table__header govuk-table__header--numeric" scope="col" aria-sort="none"><span class="no-wrap">{{ 'Outstanding queries' if params.type == 'responded' else 'Queries' }}</span></th>
+
+                    <th class="govuk-table__header govuk-table__header--numeric" scope="col"><span class="no-wrap"></span></th>
+                
+                </tr>
+            </thead>
+            
+            <tbody class="govuk-table__body">
+
+                {% for school in schoolArray | pageResults(1) %}
+
+                {% set openLink = '/school/select?selected-school=' + school.id %}
+
+                <tr class="govuk-table__row">
+
+                    <td class="govuk-table__header"><span class="no-wrap"><a href="{{ openLink }}" class="app-plain-link">{{ school.name }}</a></span></td>
+                    
+                    <td class="govuk-table__cell govuk-table__cell--numeric"><span class="no-wrap">{{ school.LAESTAB }}</span></td>
+
+                    {% if not params.isExternal %}
+                        <td class="govuk-table__cell"><span class="no-wrap">
+                            {{ hmctsBadge({
+                                text: school.type,
+                                classes: 'hmcts-badge--green' if school.type == 'academy'
+                            }) }} 
+                        </span></td>
+                    {% endif %}
+
+                    {% if params.type == 'all' %}
+                        <td class="govuk-table__cell"><span class="no-wrap">{{ school.status | friendlyStatus }}</span></td>
+                    {% endif %}
+
+                    {% if params.type == 'inbox' %}
+                        <td class="govuk-table__cell" data-sort-value="{{ school.submittedDate if school.submittedDate else '￿' }}"><span class="no-wrap">{{ school.submittedDate | formatColumnDate }}</span></td>
+                    {% endif %}
+                    
+                    {% if params.type == 'responded' %}
+                        <td class="govuk-table__cell" data-sort-value="{{ school.respondedDate if school.respondedDate else '￿' }}"><span class="no-wrap">{{ school.respondedDate | formatColumnDate }}</span></td>
+                    {% endif %}
+
+                    {% if params.type == 'not-sent' %}
+                        <td class="govuk-table__cell" data-sort-value="{{ school.dataSentDate if school.dataSentDate else '￿' }}"><span class="no-wrap">{{ school.dataSentDate | formatColumnDate if school.dataSentDate else '-' }}</span></td>
+                    {% endif %}
+
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        <span class="no-wrap">
+                            {% if params.type == 'not-sent' %}
+                                {{ school.noOfErrors | friendlyNumber if school.dataSentDate else '-' }}
+                            {% else %}
+                                {{ school.noOfErrors | friendlyNumber }}
+                            {% endif %}
+                        </span>
+                    </td>
+
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        <span class="no-wrap">
+                            {% if params.type == 'not-sent' %}
+                                {{ school.noOfQueries | friendlyNumber if school.dataSentDate else '-' }}
+                            {% else %}
+                                {{ school.noOfQueries | friendlyNumber }}
+                            {% endif %}
+                        </span>
+                    </td>
+                    
+                    <td class="govuk-table__cell govuk-table__cell--numeric" scope="col">
+                        {{ govukButton({
+                            text: 'Open',
+                            href: openLink,
+                            classes: 'govuk-!-margin-bottom-0'
+                        }) }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+        {{ paginationHTML | safe }}
+
+    </div>
+
+</div>
+{% endmacro %}

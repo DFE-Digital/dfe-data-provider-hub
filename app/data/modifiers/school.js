@@ -42,6 +42,12 @@ SchoolModifier.buildSchool = (school, isSchoolUser) => {
 	// Build combines issues array
 	var issues = queries.concat(errors)
 
+	// Set status
+	school.status = isSchoolUser ? 'no-explanations' : 'submitted'
+	school.dataSentDate = isSchoolUser
+		? Generate.randomDate(10, 1)
+		: Generate.randomDate(10, 7)
+
 	// Save to school
 	school.issues = issues
 
