@@ -4,7 +4,7 @@
 {% from "button/macro.njk" import govukButton %}
 {% macro schoolSelectionList(params) %}
 
-{% set schoolArray = params.schools %}
+{% set schoolArray = params.schools | sort(true, true, 'status') %}
 
 {% if params.type == 'inbox' %}
     {% set schoolArray = params.schools | sort(false, true, 'submittedDate') %}
@@ -15,7 +15,7 @@
 {% endif %}
 
 {% if params.type == 'not-sent' %}
-    {% set schoolArray = params.schools  | sort(false, true, 'dataSentDate')  | sort(true, true, 'status')%}
+    {% set schoolArray = params.schools  | sort(false, true, 'dataSentDate')  | sort(true, true, 'status') %}
 {% endif %}
 
 <div class="govuk-grid-row">
@@ -61,12 +61,22 @@
 
         {{ paginationHTML | safe }}
 
-        <table id="issueTable" class="govuk-table hide-caption">
+        <table id="schoolTable" class="govuk-table hide-caption sortable-table">
             
             <caption class="govuk-table__caption">Issues</caption>
             
             
             <thead class="govuk-table__head">
+                {% if params.type == 'responded' %}
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header"></th>
+                        <th class="govuk-table__header"></th>
+                        <th class="govuk-table__header"></th>
+                        <th class="govuk-table__header"></th>
+                        <th class="govuk-table__header" colspan="2"><span class="no-wrap">Outstanding issues</span></th>
+                        <th class="govuk-table__header"</th>
+                    </tr>
+                {% endif %}
                 <tr class="govuk-table__row">
                 
                     <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Name</span></th>
@@ -80,23 +90,20 @@
 
                     {% if params.type == 'all' %}
                         <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Status</span></th>
+                        <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Status updated</span></th>
                     {% endif %}
 
                         {% if params.type == 'inbox' %}
                             <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Submitted</span></th>
-                        {% endif %}
-                        
-                        {% if params.type == 'responded' %}
+                        {% elseif params.type == 'responded' %}
                             <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Responses sent</span></th>
-                        {% endif %}
-
-                        {% if params.type == 'not-sent' %}
+                        {% elseif params.type == 'not-sent' %}
                             <th class="govuk-table__header" scope="col" aria-sort="ascending"><span class="no-wrap">Data sent</span></th>
                         {% endif %}
 
-                    <th class="govuk-table__header govuk-table__header--numeric" scope="col" aria-sort="none"><span class="no-wrap">{{ 'Outstanding errors' if params.type == 'responded' else 'Errors' }}</span></th>
+                    <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Errors</span></th>
 
-                    <th class="govuk-table__header govuk-table__header--numeric" scope="col" aria-sort="none"><span class="no-wrap">{{ 'Outstanding queries' if params.type == 'responded' else 'Queries' }}</span></th>
+                    <th class="govuk-table__header" scope="col" aria-sort="none"><span class="no-wrap">Queries</span></th>
 
                     <th class="govuk-table__header govuk-table__header--numeric" scope="col"><span class="no-wrap"></span></th>
                 
@@ -107,11 +114,19 @@
 
                 {% for school in schoolArray | pageResults(1) %}
 
-                {% set openLink = '/school/select?selected-school=' + school.id %}
+                {% set openLink = ('/school/build?success-page=#root#/helpdesk/school/issues&selected-school=' + school.id) if school.status == 'submitted' %}
 
                 <tr class="govuk-table__row">
 
-                    <td class="govuk-table__header"><span class="no-wrap"><a href="{{ openLink }}" class="app-plain-link">{{ school.name }}</a></span></td>
+                    <td class="govuk-table__header">
+                        <span class="no-wrap">
+                            {% if openLink %}
+                                <a href="{{ openLink }}" class="app-plain-link">{{ school.name }}</a>
+                            {% else %}
+                                {{ school.name }}
+                            {% endif %}
+                        </span>
+                    </td>
                     
                     <td class="govuk-table__cell govuk-table__cell--numeric"><span class="no-wrap">{{ school.LAESTAB }}</span></td>
 
@@ -126,6 +141,15 @@
 
                     {% if params.type == 'all' %}
                         <td class="govuk-table__cell"><span class="no-wrap">{{ school.status | friendlyStatus }}</span></td>
+                        {% if school.status == 'submitted' %}
+                            <td class="govuk-table__cell" data-sort-value="{{ school.submittedDate if school.submittedDate else '￿' }}"><span class="no-wrap">{{ school.submittedDate | formatColumnDate }}</span></td>
+                        {% elseif school.status == 'responded' %}
+                            <td class="govuk-table__cell" data-sort-value="{{ school.respondedDate if school.respondedDate else '￿' }}"><span class="no-wrap">{{ school.respondedDate | formatColumnDate }}</span></td>
+                        {% elseif school.status == 'no-explanations' %}
+                            <td class="govuk-table__cell" data-sort-value="{{ school.dataSentDate if school.dataSentDate else '￿' }}"><span class="no-wrap">{{ school.dataSentDate | formatColumnDate if school.dataSentDate else '-' }}</span></td>
+                        {% else %}
+                            <td class="govuk-table__cell" data-sort-value="￿"><span class="no-wrap">-</span></td>
+                        {% endif %}
                     {% endif %}
 
                     {% if params.type == 'inbox' %}
@@ -140,7 +164,7 @@
                         <td class="govuk-table__cell" data-sort-value="{{ school.dataSentDate if school.dataSentDate else '￿' }}"><span class="no-wrap">{{ school.dataSentDate | formatColumnDate if school.dataSentDate else '-' }}</span></td>
                     {% endif %}
 
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                    <td class="govuk-table__cell">
                         <span class="no-wrap">
                             {% if params.type == 'not-sent' %}
                                 {{ school.noOfErrors | friendlyNumber if school.dataSentDate else '-' }}
@@ -150,7 +174,7 @@
                         </span>
                     </td>
 
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                    <td class="govuk-table__cell">
                         <span class="no-wrap">
                             {% if params.type == 'not-sent' %}
                                 {{ school.noOfQueries | friendlyNumber if school.dataSentDate else '-' }}
@@ -161,11 +185,13 @@
                     </td>
                     
                     <td class="govuk-table__cell govuk-table__cell--numeric" scope="col">
-                        {{ govukButton({
-                            text: 'Open',
-                            href: openLink,
-                            classes: 'govuk-!-margin-bottom-0'
-                        }) }}
+                        {% if openLink %}
+                            {{ govukButton({
+                                text: 'Open',
+                                href: openLink,
+                                classes: 'govuk-!-margin-bottom-0'
+                            }) }}
+                        {% endif %}
                     </td>
 
                 </tr>

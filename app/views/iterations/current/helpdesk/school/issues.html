@@ -1,0 +1,49 @@
+{% from "./../includes/identity-bar.njk" import schoolIdentityBar %}
+{% from "./../includes/school-census-header.njk" import schoolCensusHeader %}
+{% from "./../includes/school-sub-navigation.njk" import schoolSubNavigation %}
+{% from "./../includes/school-issue-list.njk" import schoolIssueList %}
+{% from "./../includes/school-issue-modal.njk" import schoolIssueModal %}
+
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    Explain the issues in your data
+{% endblock %}
+
+{% set school = data.schools | getById(data['selected-school']) %}
+{% set isReady = school | schoolIsReady %}
+
+{% block postHeader %}
+
+    {{ schoolIdentityBar({
+        school: school,
+        isReady: isReady
+    }) }}
+
+{% endblock %}
+
+{% block content %}
+
+    {{ schoolCensusHeader({
+        school: school,
+        isReady: isReady
+    }) }}
+
+    {{ schoolSubNavigation({
+        school: school,
+        isReady: isReady,
+        activePage: 'issues'
+    }) }}
+
+    {{ schoolIssueList({
+        issues: school | issuesArray
+    }) }}
+
+    {{ schoolIssueModal() }}
+
+
+{% endblock %}
+
+
+

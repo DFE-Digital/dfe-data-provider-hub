@@ -118,3 +118,8 @@ $('input[type=radio]').on('change', () => {
 		console.error(e)
 	}
 })
+
+// Initialise sortable tables
+
+var table = document.querySelector('.sortable-table')
+new SortableTable(table)

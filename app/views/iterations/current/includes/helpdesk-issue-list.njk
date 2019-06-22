@@ -1,8 +1,8 @@
 {% from "button/macro.njk" import govukButton %}
-{% macro schoolResponsesList(params) %}
+{% macro schoolIssueList(params) %}
 <div class="govuk-grid-row">
 
-    <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-column-two-thirds">
 
         <table id="issueTable" class="govuk-table govuk-table--top-align issue-table hide-caption">
             
@@ -20,11 +20,9 @@
                         Type
                     </th>
 
-                    {% if params.issues | hasPreviousNotes %}
-                        <th class="govuk-table__header" scope="col">
-                            Previous notes
-                        </th>
-                    {% endif %}
+                    <th class="govuk-table__header" scope="col">
+                        Previous notes
+                    </th>
                     
                     <th class="govuk-table__header numeric" scope="col">
                     </th>
@@ -62,29 +60,40 @@
                             </span>
                         </td>
 
-                        <td class="govuk-table__cell wider-cell">
-                        
-                            {% set currentNote = issue.notes[0] %}
-                            <div class="note">
-                                {% if issue.pupils | length > 0 %}
-                                    <h4 class="govuk-heading-s">Explanation for <a href="issue-details?current-issue={{ issue.id }}"> 
-                                        {{ issue.pupils | length | countLabel('pupil', 'pupils') }}
-                                    </a>
-                                    </h4>
-                                {% else %}
-                                    <h4 class="govuk-heading-s">Explanation for this {{ issue.category }}</h4>
-                                {% endif %}
-                                <p>{{ currentNote.text }}</p>
-                            </div>
-                            <form action="issue-details">
-                                <input type="hidden" name="current-issue" value="{{ issue.id }}">
-                                {{ govukButton({
-                                    html: 'Undo explanation',
-                                    classes: 'app-button-red'
-                                }) }}
-                            </form>
+                        <td class="govuk-table__cell">
+                            {% if issue.notes | length == 0 %}
+                                −
+                            {% else %}
+                                {% for note in issue.notes %}
+                                    <div class="note {{ note.type }}">
+                                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                                        {{ note.text }}
+                                    </div>
+                                {% endfor -%}
+                            {% endif %}
                         </td>
-                    </tr> 
+
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <div class="action-buttons">
+                                {% if issue.pupils | length != 0 %}
+                                    <form action="issue-details">
+                                        <input type="hidden" name="current-issue" value="{{ issue.id }}">
+                                        {{ govukButton({
+                                            html: 'Accept'
+                                        }) }}
+                                        {{ govukButton({
+                                            html: 'Reject',
+                                            classes: 'app-button-red'
+                                        }) }}
+                                    </form>
+                                {% else %}
+                                <button type="button" class="govuk-button open-modal">
+                                    Explain
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
 
                 {% endfor %}
                 

@@ -402,8 +402,12 @@ Generate.schools = amount => {
 		} else if (school.status == 'responded') {
 			school.submittedDate = Generate.randomDate(7, 4)
 			school.respondedDate = Generate.randomDate(3, 1)
+			school.noOfErrors = Generate.randomNumber(0, 3)
+			school.noOfQueries = Generate.randomNumber(1, 4)
 		} else if (school.status == 'no-explanations') {
 			school.dataSentDate = Generate.randomDate(10, 1)
+		} else if (school.status == 'authorised') {
+			school.authorisedDate = Generate.randomDate(10, 1)
 		}
 		return school
 	})

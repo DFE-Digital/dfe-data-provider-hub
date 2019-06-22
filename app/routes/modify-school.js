@@ -5,7 +5,7 @@ const SchoolModifier = require('../data/modifiers/school')
 
 const Helper = require('./Helper')
 
-router.post('/build', (req, res) => {
+router.all('/build', (req, res) => {
 	const selectedSchoolId = Helper.getValue('selected-school', req)
 	const isSchoolUser = Helper.getValue('user-type', req) == 'school'
 	var school = Helper.getSchoolById(selectedSchoolId, req)
