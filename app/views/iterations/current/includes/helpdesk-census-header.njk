@@ -1,0 +1,43 @@
+{% from "button/macro.njk" import govukButton %}
+{% from "warning-text/macro.njk" import govukWarningText %}
+{% macro helpdeskCensusHeader(params) %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+        {% if params.school.issues | length == 0 %}
+            <script>
+                window.location.href = 'census-data'
+            </script>
+        {% else %}
+            {% if params.isReady %}
+                <h1 class="govuk-heading-l">All issues have a response</h1>
+                <p>
+                    Check your responses carefully before sending them back to the school.
+                </p>
+                {{ govukButton({
+                    text: 'Send responses',
+                    href: 'return-note',
+                    classes: ''
+                }) }}
+            {% else %}
+                <h1 class="govuk-heading-l">Respond to the explanations added by the school</h1>
+                <p>
+                    Carefully consider each explanation. Use the ‘acceptable explanation guide’ to decide if the explanation should be accepted or rejected.
+                </p>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="govuk-grid-column-one-half" style="text-align: right;">
+        <div class="app-callout-container">
+            <div class="app-callout">
+                <h3 class="govuk-heading-s">Download all census data</h3>
+                <p class="govuk-body-s">
+                    Download the census data for {{ params.school.name }}
+                </p>
+                <p class="govuk-body-s">
+                    <a href="#">Download as XML</a> <a href="#" class="govuk-!-margin-left-3">Download as CSV</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

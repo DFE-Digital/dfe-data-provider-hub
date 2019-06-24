@@ -207,6 +207,28 @@ a.plain-link,
 	}
 }
 
+.app-button-blue {
+	background-color: govuk-colour('blue');
+	box-shadow: 0 2px 0 darken(govuk-colour('blue'), 20%);
+
+	&[disabled],
+	&.govuk-button--disabled {
+		pointer-events: none;
+		background-color: rgba(govuk-colour('blue'), 50%);
+	}
+
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: darken(govuk-colour('blue'), 10%);
+		box-shadow: 0 2px 0 darken(govuk-colour('blue'), 20%);
+		&[disabled],
+		&.govuk-button--disabled {
+			background-color: rgba(govuk-colour('blue'), 50%);
+		}
+	}
+}
+
 // Style 'count tags' where navigation elements show the number of underlying records
 
 a .app-count-tag,

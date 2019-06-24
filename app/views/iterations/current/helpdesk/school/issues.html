@@ -1,6 +1,6 @@
 {% from "./../../includes/identity-bar.njk" import schoolIdentityBar %}
-{% from "./../../includes/school-census-header.njk" import schoolCensusHeader %}
-{% from "./../../includes/school-sub-navigation.njk" import schoolSubNavigation %}
+{% from "./../../includes/helpdesk-census-header.njk" import helpdeskCensusHeader %}
+{% from "./../../includes/helpdesk-sub-navigation.njk" import helpdeskSubNavigation %}
 {% from "./../../includes/helpdesk-issue-list.njk" import helpdeskIssueList %}
 {% from "./../../includes/school-issue-modal.njk" import schoolIssueModal %}
 
@@ -8,7 +8,7 @@
 {% extends 'layout-data-dfe.html' %}
 
 {% block pageTitle %}
-    Explain the issues in your data
+    Respond to the explanations added by the school
 {% endblock %}
 
 {% set school = data.schools | getById(data['selected-school']) %}
@@ -25,19 +25,19 @@
 
 {% block content %}
 
-    {{ schoolCensusHeader({
+    {{ helpdeskCensusHeader({
         school: school,
         isReady: isReady
     }) }}
 
-    {{ schoolSubNavigation({
+    {{ helpdeskSubNavigation({
         school: school,
         isReady: isReady,
         activePage: 'issues'
     }) }}
 
     {{ helpdeskIssueList({
-        issues: school | issuesArray
+        issues: school | helpdeskIssuesArray
     }) }}
 
     {{ schoolIssueModal() }}

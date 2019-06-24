@@ -927,7 +927,7 @@ module.exports = [
 				type: 'school',
 				author: Generate.name(),
 				text: 'November 2017 and February 2018.',
-				date: Generate.randomDate(3, 2)
+				date: Generate.randomDate(2, 1)
 			}
 		]
 	},

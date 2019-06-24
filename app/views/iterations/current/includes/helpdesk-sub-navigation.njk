@@ -5,20 +5,20 @@
     label: 'Sub navigation',
     items: [
         {
-            text: params.school | actionNeededCount | countLabel('issue', 'issues'),
+            text: params.school | helpdeskActionNeededCount | countLabel('issue', 'issues'),
             href: 'issues',
             active: params.activePage == 'issues'
-        } if not params.isReady, 
+        }, 
         {
-            text: params.school | acceptedCount | countLabel('accepted explanation', 'accepted explanations'),
+            text: params.school | acceptedCount + ' accepted',
             href: 'accepted',
             active: params.activePage == 'accepted'
-        } if params.school | acceptedCount > 0,
+        },
         {
-            text: params.school | rejectedCount | countLabel('rejected explanation', 'rejected explanations'),
+            text: params.school | rejectedCount + ' rejected',
             href: 'rejected',
             active: params.activePage == 'rejected'
-        } if params.school | rejectedCount > 0,
+        },
         {
             text: 'Census data',
             href: 'census-data',

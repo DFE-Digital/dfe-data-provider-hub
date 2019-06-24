@@ -21,11 +21,11 @@
                     </th>
 
                     <th class="govuk-table__header" scope="col">
-                        Acceptable note guide
+                        Acceptable explanation guide
                     </th>
 
                     <th class="govuk-table__header wider-cell" scope="col">
-                        Notes
+                        Explanation
                     </th>
                     
                     <th class="govuk-table__header numeric" scope="col">
@@ -66,7 +66,7 @@
                         </td>
 
                         <td class="govuk-table__cell">
-                            {{ issue.guide }}
+                            {{ issue.guide | orElse('<b>Errors are not acceptable in most cases.</b><br>Please seek the advice of DDU if in doubt.') | safe }}
                         </td>
 
                         <td class="govuk-table__cell wider-cell">
@@ -75,7 +75,7 @@
                             {% else %}
                                 {% for note in issue.notes | sort(true, true, 'date') %}
                                     <div class="note {{ note.type }}">
-                                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Explanation added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
                                         {{ note.text }}
                                     </div>
                                 {% endfor -%}
@@ -85,19 +85,24 @@
                         <td class="govuk-table__cell govuk-table__cell--numeric">
                             <div class="action-buttons">
                                 {% if issue.pupils == null or issue.pupils | length == 0 %}
-                                    <form action="issue-details">
-                                        <input type="hidden" name="current-issue" value="{{ issue.id }}">
+                                    <form action="/issue/accept" method="post">
+                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
+                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues">
                                         {{ govukButton({
                                             html: 'Accept'
                                         }) }}
+                                    </form>
+                                   <form action="/issue/reject" method="post">
+                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
+                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues">
                                         {{ govukButton({
                                             html: 'Reject',
-                                            classes: 'app-button-red'
+                                            classes: 'govuk-button--warning'
                                         }) }}
                                     </form>
                                 {% else %}
-                                    <button type="button" class="govuk-button open-modal">
-                                        View pupils
+                                    <button type="button" class="govuk-button app-button-blue open-modal">
+                                        View {{ 'pupil' if issue.pupils | length == 1 else issue.pupils | length | countLabel('pupil', 'pupils') }}
                                     </button>
                                 {% endif %}
                             </div>

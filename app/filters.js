@@ -112,7 +112,7 @@ module.exports = function(env) {
 			' ' +
 			date.getFullYear() +
 			' at ' +
-			('0' + date.getHours()).slice(-2) +
+			('0' + (Math.round(date.getHours() / 2.4) + 7)).slice(-2) +
 			':' +
 			('0' + date.getMinutes()).slice(-2)
 		)
@@ -295,6 +295,24 @@ module.exports = function(env) {
 		return count
 	}
 
+	filters.helpdeskActionNeededCount = school => {
+		var count = 0
+		school.issues.forEach(issue => {
+			if (issue.hasResponse != 'true') {
+				if (issue.pupils) {
+					if (issue.pupils.length > 0) {
+						count += issue.pupils.length
+					} else {
+						count++
+					}
+				} else {
+					count++
+				}
+			}
+		})
+		return count
+	}
+
 	filters.acceptedCount = school => {
 		var count = 0
 		school.issues.forEach(issue => {
@@ -344,6 +362,16 @@ module.exports = function(env) {
 		var output = []
 		school.issues.forEach(issue => {
 			if (issue.isResolved != 'true') {
+				output.push(issue)
+			}
+		})
+		return output
+	}
+
+	filters.helpdeskIssuesArray = school => {
+		var output = []
+		school.issues.forEach(issue => {
+			if (issue.hasResponse != 'true') {
 				output.push(issue)
 			}
 		})

@@ -4,6 +4,7 @@
     window.location.href = '/error?error-message=Entered a view where a school was required but no school was selected in session'
 </script>
 {% endif %}
+{% set status = params.school.status %}
 <div class="hmcts-identity-bar">
 
     <div class="hmcts-identity-bar__container">
@@ -19,7 +20,11 @@
         <div class="hmcts-identity-bar__details govuk-!-margin-right-0">
 
             <span class="hmcts-identity-bar__title">
+            {% if status == 'submitted' %}
+                Data sent on {{ params.school.submittedDate | formatDate }}
+            {% else %}
                 Data sent on {{ params.school.builtOn | formatDate }}
+            {% endif %}
             </span>
 
         </div>

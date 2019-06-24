@@ -192,13 +192,17 @@
                     </td>
                     
                     <td class="govuk-table__cell govuk-table__cell--numeric" scope="col">
-                        {% if openLink %}
-                            {{ govukButton({
-                                text: 'Open',
-                                href: openLink,
-                                classes: 'govuk-!-margin-bottom-0'
-                            }) }}
-                        {% endif %}
+                        <div class="action-buttons">
+                            {% if openLink %}
+                                <form action="/school/build" method="post">
+                                    <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues" />
+                                    <input type="hidden" name="selected-school" value="{{ school.id }}" />
+                                    {{ govukButton({
+                                        html: 'Open'
+                                    }) }}
+                                </form>
+                            {% endif %}
+                        </div>
                     </td>
 
                 </tr>

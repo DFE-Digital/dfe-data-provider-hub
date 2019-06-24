@@ -46,4 +46,21 @@ router.post('/undo-explanation', (req, res) => {
 	Helper.saveSchoolToData(modifiedSchool, req, res)
 })
 
+router.post('/accept', (req, res) => {
+	const selectedSchoolId = Helper.getValue('selected-school', req)
+	const selectedIssue = Helper.getValue('selected-issue', req)
+	var selectedPupils = []
+	if (Array.isArray(req.body['selected-pupils'])) {
+		selectedPupils = req.body['selected-pupils']
+	}
+	req.session.data.pupilsMoved = selectedPupils.length
+	var school = Helper.getSchoolById(selectedSchoolId, req)
+	var modifiedSchool = IssueModifier.acceptExplanation(
+		selectedIssue,
+		school,
+		selectedPupils
+	)
+	Helper.saveSchoolToData(modifiedSchool, req, res)
+})
+
 module.exports = router
