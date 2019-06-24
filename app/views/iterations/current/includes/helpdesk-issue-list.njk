@@ -24,7 +24,7 @@
                         Acceptable note guide
                     </th>
 
-                    <th class="govuk-table__header" scope="col">
+                    <th class="govuk-table__header wider-cell" scope="col">
                         Notes
                     </th>
                     
@@ -69,11 +69,11 @@
                             {{ issue.guide }}
                         </td>
 
-                        <td class="govuk-table__cell">
+                        <td class="govuk-table__cell wider-cell">
                             {% if issue.notes | length == 0 %}
                                 −
                             {% else %}
-                                {% for note in issue.notes %}
+                                {% for note in issue.notes | sort(true, true, 'date') %}
                                     <div class="note {{ note.type }}">
                                         <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
                                         {{ note.text }}

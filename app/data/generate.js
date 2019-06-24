@@ -476,6 +476,19 @@ Generate.errors = (amount, errorArray) => {
 	errorArray.forEach(error => {
 		error.id = Generate.uuid()
 		error.handled = 'false'
+		error.notes = [
+			{
+				type: 'school',
+				author: Generate.name(),
+				text: Generate.randomItemFrom([
+					'This is correct',
+					'As discussed by LA, this has been approved',
+					'There’s a problem with my MIS so I can’t fix this data',
+					'Waiting on further information from colleague'
+				]),
+				date: Generate.randomDate(6, 4)
+			}
+		]
 		output.push(error)
 	})
 	return Generate.randomItemsFrom(output, amount)

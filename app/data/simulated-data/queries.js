@@ -348,7 +348,7 @@ module.exports = [
 				author: Generate.name(),
 				text:
 					'Our students who are dually-registered are registered to both our school and another in their home area.',
-				date: Generate.randomDate(8, 7)
+				date: Generate.randomDate(5, 3)
 			}
 		]
 	},
