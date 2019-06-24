@@ -74,7 +74,7 @@
                         <th class="govuk-table__header"></th>
                         <th class="govuk-table__header"></th>
                         <th class="govuk-table__header" colspan="2"><span class="no-wrap">Outstanding issues</span></th>
-                        <th class="govuk-table__header"</th>
+                        <th class="govuk-table__header"></th>
                     </tr>
                 {% endif %}
                 <tr class="govuk-table__row">
@@ -114,14 +114,21 @@
 
                 {% for school in schoolArray | pageResults(1) %}
 
-                {% set openLink = ('/school/build?success-page=#root#/helpdesk/school/issues&selected-school=' + school.id) if school.status == 'submitted' %}
+                {% set openLink = ('/school/build?success-page="#root#/helpdesk/school/issues"&selected-school=' + school.id) if school.status == 'submitted' %}
 
                 <tr class="govuk-table__row">
 
                     <td class="govuk-table__header">
                         <span class="no-wrap">
                             {% if openLink %}
-                                <a href="{{ openLink }}" class="app-plain-link">{{ school.name }}</a>
+                                <form action="/school/build" method="post">
+                                    <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues" />
+                                    <input type="hidden" name="selected-school" value="{{ school.id }}" />
+                                    {{ govukButton({
+                                        html: school.name,
+                                        classes: 'app-link-like-button'
+                                    }) }}
+                                </form>
                             {% else %}
                                 {{ school.name }}
                             {% endif %}

@@ -37,3 +37,14 @@
 .wider-cell {
 	min-width: 375px;
 }
+
+// Stop button content wrapping and reduce vertical spacing
+
+.action-buttons {
+	button,
+	input[type='submit'],
+	a.govuk-button {
+		white-space: nowrap;
+		margin-bottom: 8px;
+	}
+}

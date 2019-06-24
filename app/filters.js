@@ -295,6 +295,42 @@ module.exports = function(env) {
 		return count
 	}
 
+	filters.acceptedCount = school => {
+		var count = 0
+		school.issues.forEach(issue => {
+			if (issue.hasResponse == 'true' && issue.response == 'accepted') {
+				if (issue.pupils) {
+					if (issue.pupils.length > 0) {
+						count += issue.pupils.length
+					} else {
+						count++
+					}
+				} else {
+					count++
+				}
+			}
+		})
+		return count
+	}
+
+	filters.rejectedCount = school => {
+		var count = 0
+		school.issues.forEach(issue => {
+			if (issue.hasResponse == 'true' && issue.response == 'rejected') {
+				if (issue.pupils) {
+					if (issue.pupils.length > 0) {
+						count += issue.pupils.length
+					} else {
+						count++
+					}
+				} else {
+					count++
+				}
+			}
+		})
+		return count
+	}
+
 	filters.filterByStatus = (schools, status) => {
 		if (Array.isArray(status)) {
 			return schools.filter(

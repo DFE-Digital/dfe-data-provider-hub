@@ -1,8 +1,8 @@
 {% from "button/macro.njk" import govukButton %}
-{% macro schoolIssueList(params) %}
+{% macro helpdeskIssueList(params) %}
 <div class="govuk-grid-row">
 
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-full">
 
         <table id="issueTable" class="govuk-table govuk-table--top-align issue-table hide-caption">
             
@@ -21,7 +21,11 @@
                     </th>
 
                     <th class="govuk-table__header" scope="col">
-                        Previous notes
+                        Acceptable note guide
+                    </th>
+
+                    <th class="govuk-table__header" scope="col">
+                        Notes
                     </th>
                     
                     <th class="govuk-table__header numeric" scope="col">
@@ -54,10 +58,15 @@
                             </p>
                             <div class="issueData" data-modal-id="selected-issue" style="display: none;">{{ issue.id }}</div>
                         </th>
+
                         <td class="govuk-table__cell">
                             <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8 issueCategory">
                                 {{ issue.category | sentenceCase }}
                             </span>
+                        </td>
+
+                        <td class="govuk-table__cell">
+                            {{ issue.guide }}
                         </td>
 
                         <td class="govuk-table__cell">
@@ -75,7 +84,7 @@
 
                         <td class="govuk-table__cell govuk-table__cell--numeric">
                             <div class="action-buttons">
-                                {% if issue.pupils | length != 0 %}
+                                {% if issue.pupils == null or issue.pupils | length == 0 %}
                                     <form action="issue-details">
                                         <input type="hidden" name="current-issue" value="{{ issue.id }}">
                                         {{ govukButton({
@@ -87,9 +96,9 @@
                                         }) }}
                                     </form>
                                 {% else %}
-                                <button type="button" class="govuk-button open-modal">
-                                    Explain
-                                </button>
+                                    <button type="button" class="govuk-button open-modal">
+                                        View pupils
+                                    </button>
                                 {% endif %}
                             </div>
                         </td>

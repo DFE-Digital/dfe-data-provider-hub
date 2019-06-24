@@ -10,6 +10,7 @@ router.all('/build', (req, res) => {
 	const isSchoolUser = Helper.getValue('user-type', req) == 'school'
 	var school = Helper.getSchoolById(selectedSchoolId, req)
 	school = SchoolModifier.buildSchoolIfNecessary(school, isSchoolUser)
+	console.log(req.body['success-page'])
 	Helper.saveSchoolToData(school, req, res)
 })
 
