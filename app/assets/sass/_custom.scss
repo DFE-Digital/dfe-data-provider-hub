@@ -92,12 +92,17 @@ table .govuk-button {
 	font-size: 16px;
 }
 
-tbody th,
-tbody td {
-	font-size: 16px;
+tr {
+	min-height: 44px;
+}
 
-	p {
+table:not(.pupil-table) {
+	tbody th,
+	tbody td {
 		font-size: 16px;
+		p {
+			font-size: 16px;
+		}
 	}
 }
 
@@ -106,6 +111,9 @@ tbody td {
 table {
 	position: relative;
 
+	.modal-only {
+		display: none;
+	}
 	&:not(.hide-caption) {
 		margin-top: 30px;
 
@@ -258,8 +266,33 @@ a .app-count-tag,
 // Style tags
 
 .hmcts-badge {
+	display: inline-block;
 	border-radius: 3px;
 	padding-top: 2.5px;
+	&[class$='--brown'] {
+		border-color: govuk-colour('brown');
+		color: govuk-colour('brown');
+	}
+	&[class$='--bright-red'] {
+		border-color: govuk-colour('bright-red');
+		color: govuk-colour('bright-red');
+	}
+	&[class$='--light-purple'] {
+		border-color: govuk-colour('light-purple');
+		color: govuk-colour('light-purple');
+	}
+	&[class$='--bright-purple'] {
+		border-color: govuk-colour('bright-purple');
+		color: govuk-colour('bright-purple');
+	}
+	&[class$='--orange'] {
+		border-color: govuk-colour('orange');
+		color: govuk-colour('orange');
+	}
+	&[class$='--yellow'] {
+		border-color: #f5ab00;
+		color: #f5ab00;
+	}
 }
 
 // Remove underline from plain links

@@ -172,6 +172,18 @@ module.exports = function(env) {
 		}
 	}
 
+	filters.readyCheck = school => {
+		if (school.issues.length == 0) {
+			return 'clean'
+		} else if (
+			filter.acceptedCount(school) > 0 &&
+			filter.rejectedCount(school) == 0
+		) {
+			return 'ready'
+		}
+		return 'in-progress'
+	}
+
 	filters.orElse = (str, fallback) => {
 		if (!str || str == '') {
 			return fallback
@@ -372,6 +384,26 @@ module.exports = function(env) {
 		var output = []
 		school.issues.forEach(issue => {
 			if (issue.hasResponse != 'true') {
+				output.push(issue)
+			}
+		})
+		return output
+	}
+
+	filters.helpdeskAcceptedArray = school => {
+		var output = []
+		school.issues.forEach(issue => {
+			if (issue.hasResponse == 'true' && issue.response == 'accepted') {
+				output.push(issue)
+			}
+		})
+		return output
+	}
+
+	filters.helpdeskRejectedArray = school => {
+		var output = []
+		school.issues.forEach(issue => {
+			if (issue.hasResponse == 'true' && issue.response == 'rejected') {
 				output.push(issue)
 			}
 		})

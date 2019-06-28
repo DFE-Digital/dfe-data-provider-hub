@@ -112,7 +112,9 @@ const nextPageBasedOnSelection = $radioObject => {
 $('input[type=radio]').on('change', () => {
 	try {
 		$('input[type=radio]:checked').each((_, element) => {
-			nextPageBasedOnSelection($(element))
+			if (nextPageRoutes) {
+				nextPageBasedOnSelection($(element))
+			}
 		})
 	} catch (e) {
 		console.error(e)
@@ -122,4 +124,6 @@ $('input[type=radio]').on('change', () => {
 // Initialise sortable tables
 
 var table = document.querySelector('.sortable-table')
-new SortableTable(table)
+if (table) {
+	new SortableTable(table)
+}

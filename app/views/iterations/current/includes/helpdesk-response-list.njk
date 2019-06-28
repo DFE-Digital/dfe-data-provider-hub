@@ -1,7 +1,7 @@
 {% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
 {% from hmctsComponentRoot + 'hmcts-badge/macro.njk' import hmctsBadge %}
 {% from "button/macro.njk" import govukButton %}
-{% macro helpdeskIssueList(params) %}
+{% macro helpdeskResponseList(params) %}
 <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-full">
@@ -27,10 +27,7 @@
                     </th>
 
                     <th class="govuk-table__header wider-cell" scope="col">
-                        Explanation
-                    </th>
-                    
-                    <th class="govuk-table__header numeric" scope="col">
+                        Explanation and saved response
                     </th>
                 
                 </tr>
@@ -38,7 +35,7 @@
             
             <tbody class="govuk-table__body">
 
-                {% for issue in params.issues | sort(false, true, 'category') %}
+                {% for issue in params.issues | sort(true, true, 'respondedDate') %}
 
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
@@ -68,52 +65,46 @@
                             }) }}
                         </td>
 
-                        <td class="govuk-table__cell issueData" data-modal-id="guide">
+                        <td class="govuk-table__cell">
                             {{ issue.guide | orElse('<b>Errors are not acceptable in most cases.</b><br>Please seek the advice of DDU if in doubt.') | safe }}
                         </td>
 
-                        <td class="govuk-table__cell wider-cell issueData" data-modal-id="notes">
+                        <td class="govuk-table__cell wider-cell">
                             {% if issue.notes | length == 0 %}
                                 −
                             {% else %}
                                 {% for note in issue.notes | sort(false, true, 'date') %}
                                     <div class="note {{ note.type }}">
-                                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Explanation added by ' if note.type == 'school' }} {{ note.author }}<br><span style="font-weight: normal;">{{ note.date | formatDate }}</span></span>
+                                        <span class="title">{{ 'Approved' if note.type == 'approval' }}{{ 'Rejected' if note.type == 'reply' }}{{ ('Explanation added by ' + note.author + '<br><span style="font-weight: normal;">' + note.date | formatDate + '</span>') | safe if note.type == 'school' }}</span>
                                         {{ note.text }}
                                     </div>
                                 {% endfor -%}
+                                {% if issue.response == 'accepted' %}
+                                    <div class="note approval">
+                                        <span class="title">Accepted</span>
+                                    </div>
+                                {% endif %}
                             {% endif %}
-                        </td>
-
-                        <td class="govuk-table__cell govuk-table__cell--numeric">
                             <div class="action-buttons">
                                 {% if issue.pupils == null or issue.pupils | length == 0 %}
-                                    <form action="/issue/accept" method="post">
+                                    <form action="/issue/undo-response" method="post">
                                         <input type="hidden" name="selected-issue" value="{{ issue.id }}">
-                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues">
+                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
                                         {{ govukButton({
-                                            html: 'Accept'
+                                            html: 'Undo response',
+                                            classes: 'govuk-button--warning open-modal'
                                         }) }}
                                     </form>
-                                    {{ govukButton({
-                                        html: 'Reject',
-                                        classes: 'govuk-button--warning open-modal',
-                                        type: 'button'
-                                    }) }}
                                 {% else %}
-                                    <form action="/issue/accept" method="post">
+                                    <form action="/issue/undo-response" method="post">
                                         <input type="hidden" name="selected-issue" value="{{ issue.id }}">
-                                        <input type="hidden" name="select-all-pupils" value="true">
-                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/issues">
+                                            <input type="hidden" name="select-all-pupils" value="true">
+                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
                                         {{ govukButton({
-                                            html: 'Accept' + (' for all pupils' if issue.pupils | length > 1)
+                                            html: 'Undo response',
+                                            classes: 'govuk-button--warning open-modal'
                                         }) }}
                                     </form>
-                                    {{ govukButton({
-                                        html: 'Reject' + (' for all pupils' if issue.pupils | length > 1),
-                                        classes: 'govuk-button--warning open-modal',
-                                        type: 'button'
-                                    }) }}
                                     <form action="issue-details" method="post">
                                         <input type="hidden" name="selected-issue" value="{{ issue.id }}">
                                         <button type="submit" class="govuk-button app-button-blue">
@@ -123,6 +114,7 @@
                                 {% endif %}
                             </div>
                         </td>
+
                     </tr>
 
                 {% endfor %}

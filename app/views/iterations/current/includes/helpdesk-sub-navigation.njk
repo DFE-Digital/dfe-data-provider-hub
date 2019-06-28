@@ -5,17 +5,17 @@
     label: 'Sub navigation',
     items: [
         {
-            text: params.school | helpdeskActionNeededCount | countLabel('issue', 'issues'),
+            html: 'Responses needed' + params.school | helpdeskActionNeededCount | countTag,
             href: 'issues',
             active: params.activePage == 'issues'
         }, 
         {
-            text: params.school | acceptedCount + ' accepted',
+            html: 'Accepted' + params.school | acceptedCount | countTag,
             href: 'accepted',
             active: params.activePage == 'accepted'
         },
         {
-            text: params.school | rejectedCount + ' rejected',
+            html: 'Rejected' + params.school | rejectedCount | countTag,
             href: 'rejected',
             active: params.activePage == 'rejected'
         },

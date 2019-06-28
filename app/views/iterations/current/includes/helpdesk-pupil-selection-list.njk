@@ -1,14 +1,16 @@
 {% from "button/macro.njk" import govukButton %}
 {% from "warning-text/macro.njk" import govukWarningText %}
 {% from "textarea/macro.njk" import govukTextarea %}
-
-{% macro pupilSelectionList(params) %}
+{% from "radios/macro.njk" import govukRadios %}
+{% macro helpdeskPupilSelectionList(params) %}
 
 {% set issue = params.issue %}
 {% set hasMultiplePupils = issue.pupils | length > 1 %}
 {% set isError = issue.category == 'error' %}
 
-<form id="pupil-select-form" action="{{ '/issue/undo-explanation' if params.isResolved else '/issue/explain' }}" method="post">
+
+
+<form id="pupil-select-form" action="{{ '/issue/undo-response' if issue.hasResponse else '/issue/respond' }}" method="post">
 
     <div class="govuk-grid-row">
 
@@ -59,7 +61,7 @@
                                 </th>
                             {% endif %}
                             <th class="govuk-table__header" scope="row">
-                                <a href="#" class="open-dialog plain-link" data-pupil="{{ loop.index - 1 }}">
+                                <a href="#" class="open-modal plain-link" data-pupil="{{ loop.index - 1 }}">
                                     <span class="issueData" data-modal-id="modal-title">
                                         {{ pupil.UPN }}
                                     </span>
@@ -89,61 +91,94 @@
         </div>
 
     </div>
-
     <div class="govuk-grid-row">
-        
-        <div class="govuk-grid-column-one-half">
-            
-            {% if params.isResolved %}
+        <div class="govuk-grid-column-one-half govuk-!-margin-bottom-5">
 
-                {{ govukButton({
-                    html: 'Undo explanation for selected pupils' if hasMultiplePupils else 'Undo explanation'
-                }) }}
+                {% if not issue.hasResponse %}
 
-            {% else %}
-
-                {% if isError %}
-
-                    {{ govukWarningText({
-                        html: 'This data should be corrected in your MIS. We can only accept an explanation for this error in certain cases.' | safe,
-                        iconFallbackText: 'Warning'
-                    }) }}
-
-                {% else %}
-
-                    {% if isResolved == false %}
-
-                        {{ govukInsetText({
-                            text: 'Select one or more pupils from the list and explain why you cannot resolve this ' + issue.category + '.',
-                            classes: 'no-selection-hide'
-                        }) }}
-
+                    {% if issue.category == 'query' %}
+                        <h3 class="govuk-heading-m">Acceptable explanation guide</h3>
                     {% endif %}
 
-                    <h4 class="govuk-heading-s">If you are sure the data for {{ issue.pupils | pluralLabel('this pupil', 'each of these pupils') }} is correct in your MIS you must give us an explanation that meets this criteria:</h4>
                     <p>
-                        {{ issue.guide | addFullStop }}
+                        {{ issue.guide | orElse('<b>Errors are not acceptable in most cases.</b><br>Please seek the advice of DDU if in doubt.') | safe }}
                     </p>
 
                 {% endif %}
 
-                {{ govukTextarea({
-					id: 'explanation-content',
-					name: 'response-note',
-					classes: 'govuk-input--width-30',
-					label: {
-						text: 'Explain why you cannot correct this data' if isError else 'Explanation'
-					}
-				}) }}
+                <h3 class="govuk-heading-m">Explanation</h3>
 
-                <input type="hidden" id="selected-issue" name="selected-issue" value="{{ params.issue.id }}">
-                <input type="hidden" name="success-page" value="#root#/school/issue-details">
+                {% for note in issue.notes | sort(false, true, 'date') %}
+                    <div class="note {{ note.type }}">
+                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Explanation added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                        {{ note.text }}
+                    </div>
+                {% endfor -%}
+
+                <br class="govuk-!-margin-bottom-5">
+
+            {% if issue.hasResponse %}
+
+                {{ govukButton({
+                    html: 'Undo response for selected pupils' if hasMultiplePupils else 'Undo response'
+                }) }}
+
+            {% else %}
+
+                {% set responseNoteHTML %}
+
+                    {{ govukTextarea({
+                        id: 'reject-note',
+                        name: 'reject-note',
+                        classes: 'govuk-input--width-30',
+                        label: {
+                            text: 'Why is this explanation not acceptable?'
+                        },
+                        hint: {
+                            text: 'Let the school know what they can do to improve their data or the explanation they have given.'
+                        }
+                    }) }}
+
+                {% endset %}
+
+                {{ govukRadios({
+                    idPrefix: 'response-type',
+                    name: 'response-type',
+                    classes: 'govuk-radios--small',
+                    fieldset: {
+                        legend: {
+                            text: 'Response',
+                            isPageHeading: false,
+                            classes: 'govuk-fieldset__legend--m'
+                        }
+                    },
+                    items: [
+                        {
+                            text: 'Accept explanation',
+                            value: 'accept'
+                        },
+                        {
+                            text: 'Reject explanation',
+                            value: 'reject',
+                            conditional: {
+                                html: responseNoteHTML
+                            }
+                        }
+                    ]
+                }) }}
+
+                <input type="hidden" id="selected-issue" name="selected-issue" value="{{ issue.id }}">
+                <input type="hidden" name="success-page" value="#root#/helpdesk/school/issue-details">
                 
 				{{ govukButton({
-					html: 'Save explanation'
+					html: 'Save response for selected pupils'
 				}) }}
 
             {% endif %}
+
+            <p>
+                <a href="{{ 'responses' if hasResponse else 'issues' }}">Cancel</a>
+            </p>
 
         </div>
 

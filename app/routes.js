@@ -19,6 +19,8 @@ router.all('*', (req, _, next) => {
 	set(req.session.data, 'time', new Date().getTime())
 	set(req.session.data, 'pupilsMoved', '0')
 	set(req.session.data, 'issueMoved', 'false')
+	set(req.session.data, 'resolution', '')
+	set(req.session.data, 'lastResponseType', '')
 	next()
 })
 

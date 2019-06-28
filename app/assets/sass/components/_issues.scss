@@ -1,6 +1,8 @@
 // Style note components
 
 .note {
+	font-family: $govuk-font-family;
+
 	.title {
 		display: block;
 		font-weight: bold;
@@ -41,6 +43,7 @@
 // Stop button content wrapping and reduce vertical spacing
 
 .action-buttons {
+	text-align: right;
 	button,
 	input[type='submit'],
 	a.govuk-button {

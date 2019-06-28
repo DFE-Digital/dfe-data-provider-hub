@@ -1,0 +1,85 @@
+{% from "./../../includes/identity-bar.njk" import schoolIdentityBar %}
+{% from "./../../includes/helpdesk-pupil-selection-list.njk" import helpdeskPupilSelectionList %}
+
+{% extends 'layout-data-dfe.html' %}
+
+{% set school = data.schools | getById(data['selected-school']) %}
+{% set issue = school.issues | getById(data['selected-issue']) %}
+{% set hasResponse = issue.hasResponse == 'true' %}
+{% set isReady = school | schoolIsReady %}
+
+{% block pageTitle %}
+    {% if issue %}
+        Issue details: {{ issue.category | sentenceCase }} {{ issue.number }}
+    {% endif %}
+{% endblock %}
+
+{% block postHeader %}
+
+    {{ schoolIdentityBar({
+        school: school,
+        isReady: isReady
+    }) }}
+
+{% endblock %}
+
+{% block content %}
+
+    {% if data.issueMoved == 'true' %}
+
+        {{ ('issues' if hasResponse else data.lastResponseType) | redirect | safe }}
+
+    {% else %}
+
+        {% if issue %}
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    {{ govukBackLink({
+                        text: 'Back',
+                        href: issue.response if hasResponse else 'issues',
+                        classes: 'govuk-!-margin-bottom-5'
+                    }) }}
+
+                    {% if data.pupilsMoved != 0 %}
+
+                        {% set bannerHtml %}
+                            <h2 class="govuk-heading-m">{{ 'Explanation ' + data.resolution + 'ed for ' + data.pupilsMoved | countLabel('pupil', 'pupils') if not hasResponse else 'Response undone for ' + data.pupilsMoved | countLabel('pupil', 'pupils') }}</a></h2>
+                            {% set remainingPupils = issue.pupils | length %}
+                            {% if not hasResponse %}
+                                <p>You need to respond to this explanation for {{ remainingPupils }} more pupil{{ 's' if remainingPupils > 1 }}.</p>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ hmctsBanner({
+                            html: bannerHtml
+                        }) }} 
+
+                    {% endif %}
+
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+                        {{ issue.number }}
+                        <span class="type-tag {{ issue.category }} govuk-!-margin-left-2 govuk-body">
+                            {{ issue.category | sentenceCase }}
+                        </span>
+                    </h1>
+                    <p>
+                        {{ issue.description }}
+                    </p>
+                </div>
+
+            </div>
+
+            {{ helpdeskPupilSelectionList({
+                issue: issue,
+                hasResponse: hasResponse
+            }) }}
+
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+
+

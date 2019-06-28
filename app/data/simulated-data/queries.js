@@ -704,13 +704,13 @@ module.exports = [
 				type: 'school',
 				author: Generate.name(),
 				text: 'Confirmed correct',
-				date: Generate.randomDate(3, 2)
+				date: Generate.randomDate(7, 6)
 			},
 			{
 				type: 'reply',
 				author: Generate.name(),
 				text: 'Please can you provide a reason for the inconsistency?',
-				date: Generate.randomDate(3, 2)
+				date: Generate.randomDate(5, 4)
 			},
 			{
 				type: 'school',

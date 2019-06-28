@@ -1,4 +1,5 @@
-{% from "button/macro.njk" import govukButton %}
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-badge/macro.njk' import hmctsBadge %}{% from "button/macro.njk" import govukButton %}
 {% macro schoolIssueList(params) %}
 <div class="govuk-grid-row">
 
@@ -39,9 +40,9 @@
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
                             <h3 class="govuk-heading-m govuk-!-margin-bottom-1 issueData" data-modal-id="modal-title">
-                                {{ issue.number }}
+                                <span class="govuk-!-margin-right-2">{{ issue.number }}</span>
                                 {% if issue.pupils | length > 0 %}
-                                    <span class="no-wrap type-tag count  govuk-!-margin-left-2">
+                                    <span class="no-wrap type-tag count">
                                         {% if issue.pupils | length != 1 %}
                                             {{ issue.pupils | length }} pupils
                                             {% set consolidatedQuery = true %}
@@ -57,9 +58,10 @@
                             <div class="issueData" data-modal-id="selected-issue" style="display: none;">{{ issue.id }}</div>
                         </th>
                         <td class="govuk-table__cell">
-                            <span class="no-wrap type-tag {{ issue.category }} govuk-!-margin-right-8 issueCategory">
-                                {{ issue.category | sentenceCase }}
-                            </span>
+                            {{ hmctsBadge({
+                                text: issue.category,
+                                classes: 'hmcts-badge--bright-purple' if issue.category == 'query' else 'hmcts-badge--bright-red'
+                            }) }}
                         </td>
 
                         {% if params.issues | hasNotes %}
@@ -69,7 +71,7 @@
                                 {% else %}
                                     {% for note in issue.notes %}
                                         <div class="note {{ note.type }}">
-                                            <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                                            <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Note added by ' if note.type == 'school' }} {{ note.author }}<br><span style="font-weight: normal;">{{ note.date | formatDate }}</span></span>
                                             {{ note.text }}
                                         </div>
                                     {% endfor -%}
@@ -81,7 +83,7 @@
                             <div class="action-buttons">
                                 {% if issue.pupils | length != 0 %}
                                     <form action="issue-details">
-                                        <input type="hidden" name="current-issue" value="{{ issue.id }}">
+                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
                                         {{ govukButton({
                                             html: 'Explain'
                                         }) }}

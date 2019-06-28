@@ -1,8 +1,8 @@
 {% from "./../../includes/identity-bar.njk" import schoolIdentityBar %}
 {% from "./../../includes/helpdesk-census-header.njk" import helpdeskCensusHeader %}
 {% from "./../../includes/helpdesk-sub-navigation.njk" import helpdeskSubNavigation %}
-{% from "./../../includes/helpdesk-issue-list.njk" import helpdeskIssueList %}
-{% from "./../../includes/reject-modal.njk" import rejectModal %}
+{% from "./../../includes/helpdesk-response-list.njk" import helpdeskResponseList %}
+{% from "./../../includes/school-issue-modal.njk" import schoolIssueModal %}
 
 
 {% extends 'layout-data-dfe.html' %}
@@ -33,14 +33,15 @@
     {{ helpdeskSubNavigation({
         school: school,
         isReady: isReady,
-        activePage: 'issues'
+        activePage: 'accepted'
     }) }}
 
-    {{ helpdeskIssueList({
-        issues: school | helpdeskIssuesArray
+    {{ helpdeskResponseList({
+        issues: school | helpdeskAcceptedArray,
+        time: data.time
     }) }}
 
-    {{ rejectModal() }}
+    {{ schoolIssueModal() }}
 
 
 {% endblock %}
