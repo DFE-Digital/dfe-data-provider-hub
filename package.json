@@ -12,7 +12,6 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"@babel/preset-env": "^7.4.5",
 		"@hmcts/frontend": "0.0.34-alpha",
 		"acorn": "^6.0.5",
 		"ansi-colors": "^3.2.3",
@@ -55,7 +54,9 @@
 		"save": "^2.4.0",
 		"sync-request": "^6.0.0",
 		"universal-analytics": "^0.4.16",
-		"uuid": "^3.3.2"
+		"uuid": "^3.3.2",
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5"
 	},
 	"greenkeeper": {
 		"ignore": [
