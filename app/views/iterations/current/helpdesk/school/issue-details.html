@@ -52,7 +52,9 @@
                         {% endset %}
 
                         {{ hmctsBanner({
-                            html: bannerHtml
+                            type: 'information',
+                            html: bannerHtml,
+                            iconFallbackText: 'Information'
                         }) }} 
 
                     {% endif %}

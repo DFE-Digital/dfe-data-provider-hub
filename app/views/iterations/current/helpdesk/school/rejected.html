@@ -7,7 +7,7 @@
 {% extends 'layout-data-dfe.html' %}
 
 {% block pageTitle %}
-    Respond to the explanations added by the school
+    Rejected explanations for issues
 {% endblock %}
 
 {% set school = data.schools | getById(data['selected-school']) %}
@@ -35,10 +35,28 @@
         activePage: 'rejected'
     }) }}
 
-    {{ helpdeskResponseList({
-        issues: school | helpdeskRejectedArray,
-        time: data.time
-    }) }}
+    {% if school | helpdeskRejectedArray | length > 0 %}
+
+        {{ helpdeskResponseList({
+            issues: school | helpdeskRejectedArray,
+            time: data.time
+        }) }}
+
+        {{ schoolIssueModal() }}
+
+    {% else %}
+
+        <div class="govuk-grid-row">
+            
+            <div class="govuk-grid-column-one-half">
+                
+                <p>You have not rejected any explanations.</p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
 
 
 {% endblock %}

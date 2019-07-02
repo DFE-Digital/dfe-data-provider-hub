@@ -8,7 +8,7 @@
 {% extends 'layout-data-dfe.html' %}
 
 {% block pageTitle %}
-    Respond to the explanations added by the school
+    Accepted explanations for issues
 {% endblock %}
 
 {% set school = data.schools | getById(data['selected-school']) %}
@@ -36,12 +36,28 @@
         activePage: 'accepted'
     }) }}
 
-    {{ helpdeskResponseList({
-        issues: school | helpdeskAcceptedArray,
-        time: data.time
-    }) }}
+    {% if school | helpdeskAcceptedArray | length > 0 %}
 
-    {{ schoolIssueModal() }}
+        {{ helpdeskResponseList({
+            issues: school | helpdeskAcceptedArray,
+            time: data.time
+        }) }}
+
+        {{ schoolIssueModal() }}
+
+    {% else %}
+
+        <div class="govuk-grid-row">
+            
+            <div class="govuk-grid-column-one-half">
+                
+                <p>You have not accepted any explanations.</p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
 
 
 {% endblock %}

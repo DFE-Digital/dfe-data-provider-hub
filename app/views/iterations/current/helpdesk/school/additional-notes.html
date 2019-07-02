@@ -8,17 +8,13 @@
 {% extends 'layout-data-dfe.html' %}
 
 {% block pageTitle %}
-    Respond to the explanations added by the school
+    Additional notes
 {% endblock %}
 
 {% set school = data.schools | getById(data['selected-school']) %}
 {% set isReady = school | schoolIsReady %}
 
 {% block postHeader %}
-
-    {% if (school | helpdeskActionNeededCount == 0) %}
-        {{ ('rejected' if school | rejectedCount > 0 else 'accepted') | redirect | safe }}
-    {% endif %}
 
     {{ schoolIdentityBar({
         school: school,
@@ -37,14 +33,26 @@
     {{ helpdeskSubNavigation({
         school: school,
         isReady: isReady,
-        activePage: 'issues'
+        activePage: 'additional-notes'
     }) }}
 
-    {{ helpdeskIssueList({
-        issues: school | helpdeskIssuesArray
-    }) }}
+    <div class="govuk-grid-row">
+        
+        <div class="govuk-grid-column-one-half">
+            {% if school.additionalNotes | length > 0 %}
+            {% for note in school.additionalNotes %}
+                <div class="note {{ note.type }}">
+                    <span class="title">Note added by {{ note.author }} from {{ school.name if note.type == 'school' else note.author }}<br>{{ note.date | formatDate }}</span>
+                    {{ note.text }}
+                </div>
+            {% endfor %}
+            {% else %}
+                <p>There are no advisory notes for this submission.</p>
+            {% endif %}
 
-    {{ rejectModal() }}
+        </div>
+
+    </div>
 
 
 {% endblock %}

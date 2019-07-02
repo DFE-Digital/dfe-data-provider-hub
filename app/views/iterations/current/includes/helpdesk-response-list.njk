@@ -2,127 +2,127 @@
 {% from hmctsComponentRoot + 'hmcts-badge/macro.njk' import hmctsBadge %}
 {% from "button/macro.njk" import govukButton %}
 {% macro helpdeskResponseList(params) %}
-<div class="govuk-grid-row">
+    <div class="govuk-grid-row">
 
-    <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-full">
 
-        <table id="issueTable" class="govuk-table govuk-table--top-align issue-table hide-caption">
-            
-            <caption class="govuk-table__caption">Issues</caption>
-            
-            
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    
-                    <th class="govuk-table__header" scope="col">
-                        Issue
-                    </th>
-
-                    <th class="govuk-table__header" scope="col">
-                        Type
-                    </th>
-
-                    <th class="govuk-table__header" scope="col">
-                        Acceptable explanation guide
-                    </th>
-
-                    <th class="govuk-table__header wider-cell" scope="col">
-                        Explanation and saved response
-                    </th>
+            <table id="issueTable" class="govuk-table govuk-table--top-align issue-table hide-caption">
                 
-                </tr>
-            </thead>
-            
-            <tbody class="govuk-table__body">
-
-                {% for issue in params.issues | sort(true, true, 'respondedDate') %}
-
+                <caption class="govuk-table__caption">Issues</caption>
+                
+                
+                <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
-                            <h3 class="govuk-heading-m govuk-!-margin-bottom-1 issueData" data-modal-id="modal-title">
-                                <span class="govuk-!-margin-right-2">{{ issue.number }}</span>
-                                {% if issue.pupils | length > 0 %}
-                                    <span class="no-wrap type-tag count">
-                                        {% if issue.pupils | length != 1 %}
-                                            {{ issue.pupils | length }} pupils
-                                            {% set consolidatedQuery = true %}
-                                        {% else %}
-                                            1 pupil
-                                        {% endif %}
-                                    </span>
-                                {% endif %}
-                            </h3>
-                            <p class="issueData" data-modal-id="modal-description">
-                                {{ issue.description | addFullStop }}
-                            </p>
-                            <div class="issueData" data-modal-id="selected-issue" style="display: none;">{{ issue.id }}</div>
+                        
+                        <th class="govuk-table__header" scope="col">
+                            Issue
                         </th>
 
-                        <td class="govuk-table__cell">
-                            {{ hmctsBadge({
-                                text: issue.category,
-                                classes: 'hmcts-badge--bright-purple' if issue.category == 'query' else 'hmcts-badge--bright-red'
-                            }) }}
-                        </td>
+                        <th class="govuk-table__header" scope="col">
+                            Type
+                        </th>
 
-                        <td class="govuk-table__cell">
-                            {{ issue.guide | orElse('<b>Errors are not acceptable in most cases.</b><br>Please seek the advice of DDU if in doubt.') | safe }}
-                        </td>
+                        <th class="govuk-table__header" scope="col">
+                            Acceptable explanation guide
+                        </th>
 
-                        <td class="govuk-table__cell wider-cell">
-                            {% if issue.notes | length == 0 %}
-                                −
-                            {% else %}
-                                {% for note in issue.notes | sort(false, true, 'date') %}
-                                    <div class="note {{ note.type }}">
-                                        <span class="title">{{ 'Approved' if note.type == 'approval' }}{{ 'Rejected' if note.type == 'reply' }}{{ ('Explanation added by ' + note.author + '<br><span style="font-weight: normal;">' + note.date | formatDate + '</span>') | safe if note.type == 'school' }}</span>
-                                        {{ note.text }}
-                                    </div>
-                                {% endfor -%}
-                                {% if issue.response == 'accepted' %}
-                                    <div class="note approval">
-                                        <span class="title">Accepted</span>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            <div class="action-buttons">
-                                {% if issue.pupils == null or issue.pupils | length == 0 %}
-                                    <form action="/issue/undo-response" method="post">
-                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
-                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
-                                        {{ govukButton({
-                                            html: 'Undo response',
-                                            classes: 'govuk-button--warning open-modal'
-                                        }) }}
-                                    </form>
-                                {% else %}
-                                    <form action="/issue/undo-response" method="post">
-                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
-                                            <input type="hidden" name="select-all-pupils" value="true">
-                                        <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
-                                        {{ govukButton({
-                                            html: 'Undo response',
-                                            classes: 'govuk-button--warning open-modal'
-                                        }) }}
-                                    </form>
-                                    <form action="issue-details" method="post">
-                                        <input type="hidden" name="selected-issue" value="{{ issue.id }}">
-                                        <button type="submit" class="govuk-button app-button-blue">
-                                            View {{ 'pupil' if issue.pupils | length == 1 else 'pupils' }}
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                        </td>
-
+                        <th class="govuk-table__header wider-cell" scope="col">
+                            Explanation and saved response
+                        </th>
+                    
                     </tr>
-
-                {% endfor %}
+                </thead>
                 
-            </tbody>
-        </table>
+                <tbody class="govuk-table__body">
+
+                    {% for issue in params.issues | sort(true, true, 'respondedDate') %}
+
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header issue-description" scope="row" data-sort-value="{{ issue.number }}">
+                                <h3 class="govuk-heading-m govuk-!-margin-bottom-1 issueData" data-modal-id="modal-title">
+                                    <span class="govuk-!-margin-right-2">{{ issue.number }}</span>
+                                    {% if issue.pupils | length > 0 %}
+                                        <span class="no-wrap type-tag count">
+                                            {% if issue.pupils | length != 1 %}
+                                                {{ issue.pupils | length }} pupils
+                                                {% set consolidatedQuery = true %}
+                                            {% else %}
+                                                1 pupil
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </h3>
+                                <p class="issueData" data-modal-id="modal-description">
+                                    {{ issue.description | addFullStop }}
+                                </p>
+                                <div class="issueData" data-modal-id="selected-issue" style="display: none;">{{ issue.id }}</div>
+                            </th>
+
+                            <td class="govuk-table__cell">
+                                {{ hmctsBadge({
+                                    text: issue.category,
+                                    classes: 'hmcts-badge--bright-purple' if issue.category == 'query' else 'hmcts-badge--bright-red'
+                                }) }}
+                            </td>
+
+                            <td class="govuk-table__cell">
+                                {{ issue.guide | orElse('<b>Errors are not acceptable in most cases.</b><br>Please seek the advice of DDU if in doubt.') | safe }}
+                            </td>
+
+                            <td class="govuk-table__cell wider-cell">
+                                {% if issue.notes | length == 0 %}
+                                    −
+                                {% else %}
+                                    {% for note in issue.notes | sort(false, true, 'date') %}
+                                        <div class="note {{ note.type }}">
+                                            <span class="title">{{ 'Approved' if note.type == 'approval' }}{{ 'Rejected' if note.type == 'reply' }}{{ ('Explanation added by ' + note.author + '<br><span style="font-weight: normal;">' + note.date | formatDate + '</span>') | safe if note.type == 'school' }}</span>
+                                            {{ note.text }}
+                                        </div>
+                                    {% endfor -%}
+                                    {% if issue.response == 'accepted' %}
+                                        <div class="note approval">
+                                            <span class="title">Accepted</span>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                <div class="action-buttons">
+                                    {% if issue.pupils == null or issue.pupils | length == 0 %}
+                                        <form action="/issue/undo-response" method="post">
+                                            <input type="hidden" name="selected-issue" value="{{ issue.id }}">
+                                            <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
+                                            {{ govukButton({
+                                                html: 'Undo response',
+                                                classes: 'govuk-button--warning open-modal'
+                                            }) }}
+                                        </form>
+                                    {% else %}
+                                        <form action="/issue/undo-response" method="post">
+                                            <input type="hidden" name="selected-issue" value="{{ issue.id }}">
+                                                <input type="hidden" name="select-all-pupils" value="true">
+                                            <input type="hidden" name="success-page" value="#root#/helpdesk/school/{{ issue.response }}">
+                                            {{ govukButton({
+                                                html: 'Undo response',
+                                                classes: 'govuk-button--warning open-modal'
+                                            }) }}
+                                        </form>
+                                        <form action="issue-details" method="post">
+                                            <input type="hidden" name="selected-issue" value="{{ issue.id }}">
+                                            <button type="submit" class="govuk-button app-button-blue">
+                                                View {{ 'pupil' if issue.pupils | length == 1 else 'pupils' }}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+
+        </div>
 
     </div>
-
-</div>
 {% endmacro %}

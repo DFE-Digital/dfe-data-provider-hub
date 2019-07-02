@@ -1,0 +1,90 @@
+{% from "./../../includes/identity-bar.njk" import schoolIdentityBar %}
+{% from "./../../includes/helpdesk-census-header.njk" import helpdeskCensusHeader %}
+{% from "./../../includes/helpdesk-sub-navigation.njk" import helpdeskSubNavigation %}
+{% from "./../../includes/helpdesk-issue-list.njk" import helpdeskIssueList %}
+{% from "./../../includes/reject-modal.njk" import rejectModal %}
+
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    Add an additional note
+{% endblock %}
+
+{% set school = data.schools | getById(data['selected-school']) %}
+{% set isReady = school | schoolIsReady %}
+
+{% block postHeader %}
+
+    {{ schoolIdentityBar({
+        school: school,
+        isReady: isReady
+    }) }}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+
+            <div class="govuk-grid-column-one-half">
+
+                {{ govukBackLink({
+                    text: 'Back',
+                    href: 'javascript:history.back()'
+                }) }}
+
+                <form method="post">
+
+                    {% set additionalNoteHTML %}
+
+                        {{ govukTextarea({
+                            id: 'additional-note',
+                            name: 'additional-note',
+                            label: {
+                                text: 'Additional note'
+                            }
+                        }) }}
+                    
+                    {% endset %}
+
+                    {{ govukRadios({
+                        idPrefix: 'add-additional-note',
+                        name: 'add-additional-note',
+                        fieldset: {
+                            legend: {
+                                text: 'Do you want to add an additional note for the school?',
+                                isPageHeading: true,
+                                classes: 'govuk-fieldset__legend--l'
+                            }
+                        },
+                        hint: {
+                            text: 'For example, you could include any information that might help the school improve their data or explanations.'
+                        },
+                        items: [
+                            {
+                                text: 'Yes',
+                                value: 'yes',
+                                conditional: {
+                                    html: additionalNoteHTML
+                                }
+                            },
+                            {
+                                text: 'No',
+                                value: 'no'
+                            }
+                        ]
+                    }) }}
+
+                    {{ govukButton({
+                        html: 'Send responses to school'
+                    }) }}
+
+                </form>
+
+            </div>
+
+    </div>
+
+{% endblock %}
+

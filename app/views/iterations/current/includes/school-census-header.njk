@@ -30,8 +30,12 @@
                 There are some errors and queries with the census data you have sent us.
                 </p>
                 <p>
-                You need to give an explanation for these issues before the census submission deadline.
+                You need to give an explanation for these issues before the census submission deadline on 3 July 2019.
                 </p>
+                {{ govukWarningText({
+                    text: 'You have 2 days left to send your explanations to us.',
+                    iconFallbackText: 'Warning'
+                }) }}
             {% endif %}
         {% endif %}
     </div>

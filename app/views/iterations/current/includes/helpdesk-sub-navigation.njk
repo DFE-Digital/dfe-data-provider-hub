@@ -8,7 +8,7 @@
             html: 'Responses needed' + params.school | helpdeskActionNeededCount | countTag,
             href: 'issues',
             active: params.activePage == 'issues'
-        }, 
+        } if (params.school | helpdeskActionNeededCount != 0), 
         {
             html: 'Accepted' + params.school | acceptedCount | countTag,
             href: 'accepted',
@@ -18,6 +18,11 @@
             html: 'Rejected' + params.school | rejectedCount | countTag,
             href: 'rejected',
             active: params.activePage == 'rejected'
+        },
+        {
+            text: 'Advisory notes',
+            href: 'additional-notes',
+            active: params.activePage == 'additional-notes'
         },
         {
             text: 'Census data',

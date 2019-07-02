@@ -110,7 +110,7 @@
 
                 {% for note in issue.notes | sort(false, true, 'date') %}
                     <div class="note {{ note.type }}">
-                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Explanation added by ' if note.type == 'school' }} {{ note.author }}<br>{{ note.date | formatDate }}</span>
+                        <span class="title">{{ 'Approved by ' if note.type == 'approval' }}{{ 'Rejected by ' if note.type == 'reply' }}{{ 'Explanation added by ' if note.type == 'school' }} {{ note.author }}<br><span style="font-weight: normal;">{{ note.date | formatDate }}</span></span>
                         {{ note.text }}
                     </div>
                 {% endfor -%}
@@ -120,7 +120,8 @@
             {% if issue.hasResponse %}
 
                 {{ govukButton({
-                    html: 'Undo response for selected pupils' if hasMultiplePupils else 'Undo response'
+                    html: 'Undo response for selected pupils' if hasMultiplePupils else 'Undo response',
+                    classes: 'govuk-button--warning'
                 }) }}
 
             {% else %}

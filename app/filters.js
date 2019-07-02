@@ -172,18 +172,6 @@ module.exports = function(env) {
 		}
 	}
 
-	filters.readyCheck = school => {
-		if (school.issues.length == 0) {
-			return 'clean'
-		} else if (
-			filter.acceptedCount(school) > 0 &&
-			filter.rejectedCount(school) == 0
-		) {
-			return 'ready'
-		}
-		return 'in-progress'
-	}
-
 	filters.orElse = (str, fallback) => {
 		if (!str || str == '') {
 			return fallback
@@ -478,6 +466,20 @@ module.exports = function(env) {
 
 	filters.redirect = location => {
 		return `<script>window.location.href = '${location}';</script>`
+	}
+
+	filters.readyCheck = school => {
+		if (school.issues.length == 0) {
+			return 'clean'
+		} else if (
+			filter.acceptedCount(school) > 0 &&
+			filter.rejectedCount(school) == 0
+		) {
+			return 'ready'
+		} else if (filter.rejectedCount(school) > 0) {
+			return 'all-responded'
+		}
+		return 'in-progress'
 	}
 
 	/* ------------------------------------------------------------------

@@ -8,20 +8,41 @@
                 window.location.href = 'census-data'
             </script>
         {% else %}
-            {% if params.isReady %}
-                <h1 class="govuk-heading-l">All issues have a response</h1>
-                <p>
-                    Check your responses carefully before sending them back to the school.
-                </p>
-                {{ govukButton({
-                    text: 'Send responses',
-                    href: 'return-note',
-                    classes: ''
-                }) }}
+            {% if (params.school | helpdeskActionNeededCount == 0) %}
+                {% if (params.school | acceptedCount > 0) and (params.school | rejectedCount == 0) %}
+                    <h1 class="govuk-heading-l">All explanations for issues have been accepted</h1>
+                    <p>
+                        Check the responses carefully, if all of the explanations follow the ‘acceptable explanation guide’ you may authorise this return.
+                    </p>
+                    {{ govukButton({
+                        text: 'Authorise census return',
+                        href: 'authorised',
+                        classes: ''
+                    }) }}
+                {% else %}
+                    <h1 class="govuk-heading-l">All issues have a response</h1>
+                    <p>
+                        Check your responses carefully before sending them back to the school. 
+                    </p>
+                    <p>
+                        This return cannot be authorised because of <a href="rejected">rejected explanations</a>. 
+                    </p>
+                    <p>
+                        The school will be asked to take appropriate action on responses sent by the Department for Education.
+                    </p>
+                    {{ govukButton({
+                        text: 'Send responses to school',
+                        href: 'additional-note',
+                        classes: ''
+                    }) }}
+                {% endif %}
             {% else %}
                 <h1 class="govuk-heading-l">Respond to the explanations added by the school</h1>
                 <p>
                     Carefully consider each explanation. Use the ‘acceptable explanation guide’ to decide if the explanation should be accepted or rejected.
+                </p>
+                <p>
+                    You will be given the option to authorise the return if all of the explanations are acceptable.
                 </p>
             {% endif %}
         {% endif %}
