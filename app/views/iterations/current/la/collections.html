@@ -1,0 +1,73 @@
+{% from "./../includes/la-home-navigation.njk" import laHomeSubNavigation %}
+{% from "./../includes/school-selection-list.njk" import schoolSelectionList %}
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    My work queue
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <div class="app-inline-title">
+                <h1 class="govuk-heading-l">{{ data.la.name }}</h1>
+            </div>
+        </div>
+    </div>
+
+    {{ laHomeSubNavigation({
+        activePage: 'collections'
+    }) }}
+
+    <div class="govuk-grid-row">
+        
+        <div class="govuk-grid-column-full">
+
+            {% set openHTML %}
+                {% include './collections/open.html' %}
+            {% endset %}
+
+            {% set closedHTML %}
+                {% include './collections/closed.html' %}
+            {% endset %}
+
+            {% set upcomingHTML %}
+                {% include './collections/upcoming.html' %}
+            {% endset %}
+            
+            {{ govukTabs ({
+                items: [
+                    {
+                        label: 'Open collections',
+                        id: 'open',
+                        panel: {
+                            html: openHTML
+                        }
+                    },
+                    {
+                        label: 'Closed collections',
+                        id: 'closed',
+                        panel: {
+                            html: closedHTML
+                        }
+                    },
+                    {
+                        label: 'Upcoming collections',
+                        id: 'upcoming',
+                        panel: {
+                            html: upcomingHTML
+                        }
+                    }
+                ]
+            }) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

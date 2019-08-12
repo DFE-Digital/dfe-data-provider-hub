@@ -1,0 +1,116 @@
+{% from "./../includes/la-home-navigation.njk" import laHomeSubNavigation %}
+{% from "./../includes/school-selection-list.njk" import schoolSelectionList %}
+
+{% extends 'layout-data-dfe.html' %}
+
+{% block pageTitle %}
+    My work queue
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <div class="app-inline-title">
+                <h1 class="govuk-heading-l">{{ data.la.name }}</h1>
+            </div>
+        </div>
+    </div>
+
+    {{ laHomeSubNavigation({
+        activePage: 'home'
+    }) }}
+
+    <div class="govuk-grid-row">
+        
+        <div class="govuk-grid-column-two-thirds">
+
+            <section class="govuk-!-margin-bottom-5">
+
+                <h2 class="govuk-heading-m">Autumn school census 2019</h2>
+                
+                <div class="govuk-!-margin-bottom-5">
+                    <svg width="600" height="97" viewBox="0 0 600 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="60" fill="#B1B4B6"/>
+                        <rect width="252" height="60" fill="#28A197"/>
+                        <line x1="1" y1="60" x2="1" y2="70" stroke="#B1B4B6" stroke-width="2"/>
+                        <line x1="599" y1="60" x2="599" y2="70" stroke="#B1B4B6" stroke-width="2"/>
+                        <line x1="251" y1="60" x2="251" y2="70" stroke="#B1B4B6" stroke-width="2"/>
+                        <path d="M216.904 91.326H211.47L216.904 83.251V91.326ZM220.571 91.326H218.861V81.18H216.315L209.57 91.155V93.112H216.866V96H218.861V93.112H220.571V91.326Z" fill="black"/>
+                        <path d="M231.637 94.233H225.291C226.412 93.53 227.571 92.675 228.483 91.858C230.611 89.958 231.618 87.83 231.618 85.797C231.618 82.909 229.927 80.914 226.963 80.914C223.98 80.914 222.327 83.004 222.384 85.911V86.101H224.265C224.151 84.353 224.911 82.681 226.944 82.681C228.882 82.681 229.585 84.201 229.585 85.778C229.585 88.4 227.552 90.205 226.602 91.022C225.31 92.105 223.657 93.302 222.403 94.1V96H231.637V94.233Z" fill="black"/>
+                        <path d="M238.813 85.113C238.813 86.481 237.958 87.621 236.894 87.621C235.83 87.621 234.975 86.481 234.975 85.113C234.975 83.764 235.83 82.605 236.894 82.605C237.958 82.605 238.813 83.764 238.813 85.113ZM247.401 92.029C247.401 93.397 246.546 94.537 245.482 94.537C244.418 94.537 243.563 93.397 243.563 92.029C243.563 90.661 244.418 89.521 245.482 89.521C246.546 89.521 247.401 90.661 247.401 92.029ZM240.352 85.094C240.352 82.681 239.06 81.047 236.818 81.047C234.576 81.047 233.436 83.232 233.436 85.227C233.436 87.298 234.747 89.198 236.837 89.198C239.155 89.198 240.352 87.412 240.352 85.094ZM246.052 80.933L235.317 95.506L236.362 96.304L247.097 81.731L246.052 80.933ZM248.94 91.991C248.94 89.578 247.648 87.944 245.406 87.944C243.164 87.944 242.024 90.148 242.024 92.124C242.024 94.214 243.335 96.095 245.425 96.095C247.743 96.095 248.94 94.309 248.94 91.991Z" fill="black"/>
+                    </svg>
+                </div>
+
+                <p>
+                    597 schools in your local authority have sent their school census to the Department for Education out of a total of 1,421.
+                </p>
+
+                <p>
+                    There are 19 days until the submission deadline 30 October 2019.
+                </p>
+
+                <p>
+                    <a href="#">Review sent censuses</a>
+                </p>
+
+                <p>
+                    <a href="#">View schools that have not sent data</a>
+                </p>
+
+            </section>
+        
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+
+            <h2 class="govuk-heading-m">
+                Data collections timeline
+            </h2>
+
+            {{ hmctsTimeline({
+                events: [
+                    {
+                    title: { text: 'Return deadline'},
+                    by: 'Autumn census',
+                    dateUtc: '2018-01-25T14:04',
+                    date: '30 October 2019',
+                    time: '16:00',
+                    description: { text: 'All maintained schools in your local authority must have sent their data by this date.' },
+                    documents: [
+                            {
+                                name: 'Review sent censuses',
+                                href: '#1'
+                            }, {
+                                name: 'View schools that have not sent data',
+                                href: '#2'
+                            }
+                        ]
+                    },
+                    {
+                    title: { text: 'Collection open'},
+                    by: 'Spring census',
+                    dateUtc: '2017-12-05T09:10',
+                    date: '16 January 2020',
+                    time: 'midnight',
+                    description: { text: 'Begin to ensure all maintained schools in your local authority start sending their data in preparation for the deadline.' }
+                    },
+                    {
+                    title: { text: 'Return deadline'},
+                    by: 'Spring census',
+                    dateUtc: '2017-11-20T14:27',
+                    date: '12 February 2020',
+                    time: '16:00',
+                    description: { text: 'All maintained schools in your local authority must have sent their data by this date.' }
+                    }
+                ]
+            }) }}
+            
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

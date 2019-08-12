@@ -127,3 +127,10 @@ var table = document.querySelector('.sortable-table')
 if (table) {
 	new SortableTable(table)
 }
+
+$('.hmcts-timeline__by').each(function() {
+	var newString = $(this)
+		.text()
+		.substr(3)
+	$(this).text(newString)
+})

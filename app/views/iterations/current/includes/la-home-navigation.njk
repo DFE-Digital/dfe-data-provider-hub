@@ -1,0 +1,24 @@
+{% set hmctsComponentRoot = '../../../../../node_modules/@hmcts/frontend/components/' %}
+{% from hmctsComponentRoot + 'hmcts-sub-navigation/macro.njk' import hmctsSubNavigation %}
+{% macro laHomeSubNavigation(params) %}
+{{ hmctsSubNavigation({
+    label: 'Sub navigation',
+    items: [
+        {
+            html: 'Overview',
+            href: 'home',
+            active: params.activePage == 'home'
+        },
+        {
+            html: 'Collections' + (3 | countTag),
+            href: 'collections',
+            active: params.activePage == 'collections'
+        },
+        {
+            html: 'Notifications' + (6 | countTag),
+            href: 'notifications',
+            active: params.activePage == 'notifications'
+        }
+    ]
+}) }} 
+{% endmacro %}

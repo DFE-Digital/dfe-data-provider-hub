@@ -1,0 +1,122 @@
+{% from "./../includes/la-home-navigation.njk" import laHomeSubNavigation %} {%
+from "./../includes/school-selection-list.njk" import schoolSelectionList %} {%
+extends 'layout-data-dfe.html' %} {% block pageTitle %} Notifications {%
+endblock %} {% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-one-half">
+		<div class="app-inline-title">
+			<h1 class="govuk-heading-l">{{ data.la.name }}</h1>
+		</div>
+	</div>
+</div>
+
+{{
+	laHomeSubNavigation({
+		activePage: 'notifications'
+	})
+}}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		<section class="govuk-!-margin-bottom-7">
+			<h2 class="govuk-heading-m">Immediate attention needed</h2>
+
+			<div class="notification p-high">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">
+						There are 105 conflicting pupil records in the Autumn census
+					</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+
+				{{
+					govukButton({
+						text: 'Go to report',
+						href: '#',
+						classes: ' '
+					})
+				}}
+			</div>
+		</section>
+
+		<section class="govuk-!-margin-bottom-7">
+			<h2 class="govuk-heading-m">High priority</h2>
+
+			<div class="notification p-medium">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">Notification title</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+			</div>
+
+			<div class="notification p-medium">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">Notification title</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+			</div>
+
+			<div class="notification p-medium">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">Notification title</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+			</div>
+		</section>
+
+		<section class="govuk-!-margin-bottom-7">
+			<h2 class="govuk-heading-m">Other notifications</h2>
+
+			<div class="notification p-low">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">Notification title</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+			</div>
+
+			<div class="notification p-low">
+				<div class="notification-header">
+					<h3 class="govuk-heading-s">Notification title</h3>
+					<a href="#">Mark as read</a>
+				</div>
+				<p class="govuk-body-s">
+					This is the notification content, this will be a summary of the
+					information to communicate severity.
+				</p>
+			</div>
+		</section>
+	</div>
+    <div class="govuk-grid-column-one-third">
+        <ul class="govuk-list">
+            <li>
+                <a class="govuk-link" href="#">Read notifications</a>
+            </li>
+            <li>
+                <a class="govuk-link" href="#">Notification settings</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

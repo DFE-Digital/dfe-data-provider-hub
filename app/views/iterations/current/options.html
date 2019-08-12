@@ -1,25 +1,19 @@
-{% extends 'layout.html' %}
-
-{% block pageTitle %}
-    Select prototype user type
-{% endblock %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block pageTitle %} Select prototype user type {%
+endblock %} {% block content %}
 
 <div class="govuk-grid-row">
+	<div class="govuk-grid-column-two-thirds">
+		{{
+			govukBackLink({
+				text: 'Back',
+				href: 'javascript:history.back()'
+			})
+		}}
 
-        <div class="govuk-grid-column-two-thirds">
+		<form method="post">
+			{% set usersNameHTML %}
 
-            {{ govukBackLink({
-                text: 'Back',
-                href: 'javascript:history.back()'
-            }) }}
-
-            <form method="post">
-
-                {% set usersNameHTML %}
-
-                    {{ govukInput({
+			{{ govukInput({
                         id: 'user',
                         name: 'user',
                         value: data['user'] if data['user'] else '',
@@ -30,51 +24,52 @@
                         }
                     }) }}
 
-                {% endset %}
+			{% endset %}
 
-                {{ govukRadios({
-                    idPrefix: 'user-type',
-                    name: 'user-type',
-                    fieldset: {
-                        legend: {
-                            text: 'Select prototype user type',
-                            isPageHeading: true,
-                            classes: 'govuk-fieldset__legend--xl'
-                        }
-                    },
-                    items: [
-                     {
-                            text: 'School',
-                            value: 'school'
-                        },
-                        {
-                            text: 'Collector',
-                            value: 'collector',
-                            conditional : { html: usersNameHTML }
-                        }
-                    ]
-                }) }}
+			{{
+				govukRadios({
+					idPrefix: 'user-type',
+					name: 'user-type',
+					fieldset: {
+						legend: {
+							text: 'Select prototype user type',
+							isPageHeading: true,
+							classes: 'govuk-fieldset__legend--xl'
+						}
+					},
+					items: [
+						{
+							text: 'School',
+							value: 'school'
+						},
+						{
+							text: 'Collector',
+							value: 'collector',
+							conditional: { html: usersNameHTML }
+						},
+						{
+							text: 'Local authority',
+							value: 'la'
+						}
+					]
+				})
+			}}
 
-                {{ govukButton({
-                    html: 'Save and continue'
-                }) }}
-
-            </form>
-
-        </div>
-
+			{{
+				govukButton({
+					html: 'Save and continue'
+				})
+			}}
+		</form>
+	</div>
 </div>
 
 <script>
-
-    var nextPageRoutes = {
-        school: 'school-options',
-        collector: 'helpdesk/inbox'
-    }
-
+	var nextPageRoutes = {
+		school: 'school-options',
+		collector: 'helpdesk/inbox',
+		la: 'la/home'
+	}
 </script>
 
 {% endblock %}
-
-
-

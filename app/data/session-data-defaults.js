@@ -22,5 +22,6 @@ const Generate = require('./generate')
 module.exports = {
 	// Insert values here
 	schools: Generate.schools(1403),
-	user: Generate.name()
+	user: Generate.name(),
+	la: Generate.randomItemFrom(require('./simulated-data/local-authorities'))
 }

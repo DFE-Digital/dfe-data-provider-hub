@@ -1,0 +1,44 @@
+{{ govukTable({
+    caption: 'Upcoming collections',
+    captionClasses: 'govuk-visually-hidden',
+    classes: 'collections-table',
+    firstCellIsHeader: true,
+    head: [
+        {
+            html: 'Collection'
+        },
+        {
+            html: 'Type'
+        },
+        {
+            html: 'Open date'
+        },
+        {
+            html: 'Submission deadline'
+        },
+        {
+            html: 'Expected submissions',
+            format: 'numeric'
+        }
+    ],
+    rows: [
+        [
+            {
+                html: 'Spring census'
+            },
+            {
+                html: 'All schools'
+            }, 
+            {
+                html: '8 March 2020'
+            },
+            {
+                html: '28 March 2020 at 16:00'
+            },
+            {
+                html: '1,421',
+                format: 'numeric'
+            }
+        ]
+    ]
+  }) }}

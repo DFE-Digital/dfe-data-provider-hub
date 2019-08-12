@@ -1,0 +1,131 @@
+{{ govukTable({
+    caption: 'Open collections',
+    captionClasses: 'govuk-visually-hidden',
+    classes: 'collections-table',
+    firstCellIsHeader: true,
+    head: [
+        {
+            html: 'Collection'
+        },
+        {
+            html: 'Type'
+        },
+        {
+            html: 'Submission deadline'
+        },
+        {
+            html: 'Not sent',
+            format: 'numeric'
+        },
+        {
+            html: 'Sent',
+            format: 'numeric'
+        },
+        {
+            html: 'In review',
+            format: 'numeric'
+        },
+        {
+            html: 'Authorised',
+            format: 'numeric'
+        },
+        {
+            html: ''
+        }
+    ],
+    rows: [
+        [
+            {
+                html: 'Autumn census'
+            },
+            {
+                html: 'All schools'
+            }, 
+            {
+                html: '30 October 2019 at 16:00'
+            },
+            {
+                html: '823',
+                format: 'numeric'
+            },
+            {
+                html: '21',
+                format: 'numeric'
+            },
+            {
+                html: '156',
+                format: 'numeric'
+            },
+            {
+                html: '421',
+                format: 'numeric'
+            },
+            {
+                html: '<a href="#" class="govuk-button">Open</a>',
+                classes: 'action-buttons'
+            }
+        ],
+        [
+            {
+                html: 'PRMA'
+            },
+            {
+                html: 'Local authority'
+            }, 
+            {
+                html: '5 November 2019 at midnight'
+            },
+            {
+                html: '1',
+                format: 'numeric'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '<a href="#" class="govuk-button">Start</a>',
+                classes: 'action-buttons'
+            }
+        ],
+        [
+            {
+                html: 'APAD'
+            },
+            {
+                html: 'Local authority'
+            }, 
+            {
+                html: '5 December 2019 at midnight'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '1',
+                format: 'numeric'
+            },
+            {
+                html: '-',
+                format: 'numeric'
+            },
+            {
+                html: '<a href="#" class="govuk-button">View</a>',
+                classes: 'action-buttons'
+            }
+        ]
+    ]
+  }) }}
