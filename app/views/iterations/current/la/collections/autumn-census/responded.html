@@ -1,0 +1,32 @@
+{% from "./../../../includes/la-collection-navigation.njk" import laCollectionSubNavigation %} {% from
+"./../../../includes/school-selection-list.njk" import schoolSelectionList %} {%
+extends 'layout-data-dfe.html' %} {% block pageTitle %} My work queue {%
+endblock %} {% block content %}
+
+<div class="govuk-grid-row">
+	<div class="govuk-grid-column-one-half">
+		<span class="govuk-caption-l">{{ data.la.name }}</span>
+		<h1 class="govuk-heading-l">Autumn school census</h1>
+
+		{{ govukButton ({
+			text: 'View reports',
+			href: 'reports/report-list.html',
+			classes: ' '
+		}) }}
+		
+	</div>
+</div>
+
+{{
+	laCollectionSubNavigation({
+		activePage: 'responded',
+		schools: data.schools
+	})
+}}
+
+{{ schoolSelectionList({
+        type: 'responded',
+        schools: data.schools | filterByStatus('responded')
+    }) }}
+
+{% endblock %}

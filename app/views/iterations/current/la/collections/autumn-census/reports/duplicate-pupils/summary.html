@@ -1,0 +1,138 @@
+{% from "./../../../../../includes/la-collection-navigation.njk" import laCollectionSubNavigation %}
+{% from "./../../../../../includes/school-selection-list.njk" import schoolSelectionList %} {%
+    extends 'layout-data-dfe.html' %} {% block pageTitle %} My work queue {%
+    endblock %} {% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-l">Autumn school census</span>
+            <h1 class="govuk-heading-l">Duplicate pupils</h1>
+        </div>
+    </div>
+    
+    <div class="govuk-grid-row">
+            
+            <div class="govuk-grid-column-full">
+
+                {% for pupil in data.demoPupils %}
+                    {% set selectionIndex = loop.index - 1 %}
+                    {% set altIndex = loop.index - 2 %}
+                    {% if loop.index % 2 == 0 %}
+                    <div class="app-duplicate-pupil govuk-!-padding-top-5 govuk-!-padding-right-5 govuk-!-padding-bottom-5 govuk-!-padding-left-5">
+                    
+                        <h2 class="govuk-heading-m">{{ pupil.UPN }}</h2>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
+                                <p><b>Appears in:</b><br>
+                                {{ data.schools[selectionIndex].LAESTAB | replaceLA('423') }} - {{ data.schools[selectionIndex].name }}<br>
+                                {{ data.schools[altIndex].LAESTAB }} - {{ data.schools[altIndex].name }}</p>
+                            </div>
+                            <div class="govuk-grid-column-one-third">
+                                <span class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> 
+                                {{ 
+                                    [
+                                        'This pupil cannot be solely registered at more than one school.',
+                                        'This pupil cannot be solely registered and have a main (dual registration).',
+                                        'This pupil cannot be solely registered and have a subsidiary (dual registration).',
+                                        'This pupil cannot have more than one main (dual registered) record.',
+                                        'This pupil would not normally have more than one subsidiary (dual registered) record.',
+                                        'This date of births for these pupils do not match',
+                                        'This pupil cannot have an enrolment status of ‘FE College’ and also be solely registered at another school.',
+                                        'This pupil cannot have an enrolment status of ‘Other Provider ’ and also be solely registered at another school.',
+                                        'This pupil cannot have an enrolment status of ‘FE College’ and also have a main registration at another school.',
+                                        'This pupil cannot have an enrolment status of ‘Other Provider’ and also have a main registration at another school.'
+                                    ] | randomItem 
+                                }}
+                                </span>
+                            </div>
+                        </div>
+                        {{ 
+                            govukTable({
+                                caption: 'Open collections',
+                                captionClasses: 'govuk-visually-hidden',
+                                classes: 'collections-table',
+                                firstCellIsHeader: false,
+                                head: [
+                                    {
+                                        html: 'Enrol status'
+                                    },
+                                    {
+                                        html: 'LA'
+                                    },
+                                    {
+                                        html: 'School'
+                                    },
+                                    {
+                                        html: 'Return status'
+                                    },
+                                    {
+                                        html: 'Last name'
+                                    },
+                                    {
+                                        html: 'First name'
+                                    },
+                                    {
+                                        html: 'Date of birth'
+                                    }
+                                ],
+                                rows: [
+                                    [
+                                        {
+                                            html: 'Solely registered'
+                                        },
+                                        {
+                                            html: '<div style="display:inline-block; vertical-align: middle;"><b>423</b><br>Drenton County Council</div>'
+                                        },
+                                        {
+                                            html: '<div style="display:inline-block; vertical-align: middle;"><b>9592</b><br>Drenton Secondary School</div>'
+                                        },
+                                        {
+                                            html: 'Authorised'
+                                        },
+                                        {
+                                            html: 'Miller'
+                                        },
+                                        {
+                                            html: 'Peter'
+                                        },
+                                        {
+                                            html: '2 January 2005'
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            html: 'Solely registered'
+                                        },
+                                        {
+                                            html: '<div style="display:inline-block; vertical-align: middle;"><b>' + data.schools[altIndex].LAESTAB | getLA + '</b><br>Billen County Council</div>'
+                                        },
+                                        {
+                                            html: '<div style="display:inline-block; vertical-align: middle;"><b>3244</b><br>St Peter Community High School</div>'
+                                        },
+                                        {
+                                            html: 'In review'
+                                        },
+                                        {
+                                            html: 'Miller'
+                                        },
+                                        {
+                                            html: 'Peter'
+                                        },
+                                        {
+                                            html: '2 January 2005'
+                                        }
+                                    ]
+                                ]
+                            })
+                        }} 
+                    </div>
+                    <hr class="govuk-section-break govuk-section-break--xl">
+                {% endif %}
+            {% endfor %}
+        
+        </div>
+
+    </div>
+    
+{% endblock %}
+    

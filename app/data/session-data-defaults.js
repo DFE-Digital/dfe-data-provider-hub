@@ -23,5 +23,6 @@ module.exports = {
 	// Insert values here
 	schools: Generate.schools(1403),
 	user: Generate.name(),
-	la: Generate.randomItemFrom(require('./simulated-data/local-authorities'))
+	la: Generate.randomItemFrom(require('./simulated-data/local-authorities')),
+	demoPupils: Generate.pupils(100)
 }

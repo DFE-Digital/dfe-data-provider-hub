@@ -1,0 +1,105 @@
+{% from "./../../../../includes/la-collection-navigation.njk" import laCollectionSubNavigation %}
+{% from "./../../../../includes/school-selection-list.njk" import schoolSelectionList %} {%
+    extends 'layout-data-dfe.html' %} {% block pageTitle %} My work queue {%
+    endblock %} {% block content %}
+    
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-l">{{ data.la.name }}</span>
+            <h1 class="govuk-heading-l">Autumn school census reports</h1>
+        </div>
+    </div>
+    
+    <div class="govuk-grid-row">
+        
+        <div class="govuk-grid-column-one-half">
+
+            {{ 
+                govukTable({
+                    caption: 'Open collections',
+                    captionClasses: 'govuk-visually-hidden',
+                    classes: 'collections-table',
+                    firstCellIsHeader: true,
+                    head: [
+                        {
+                            html: 'Report'
+                        },
+                        {
+                            html: ''
+                        }
+                    ],
+                    rows: [
+                        [
+                            {
+                                html: 'Duplicate pupils'
+                            },
+                            {
+                                html: '<a href="duplicate-pupils/summary.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Free school meals summary'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Pupil premium summary'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Early years pupil premium'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Adopted from care pupil premium'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Absence tables summary'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ],
+                        [
+                            {
+                                html: 'Pupil numbers'
+                            },
+                            {
+                                html: '<a href="collections/autumn-census/inbox.html" class="govuk-button">Open</a>',
+                                classes: 'action-buttons'
+                            }
+                        ]
+                    ]
+                }) 
+            }}
+
+            
+        </div>
+
+    </div>
+    
+{% endblock %}
+    

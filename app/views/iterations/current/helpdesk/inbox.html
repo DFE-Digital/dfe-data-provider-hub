@@ -18,10 +18,12 @@
         </div>
     </div>
 
-    {{ helpdeskQueueSubNavigation({
-        activePage: 'inbox',
-        schools: data.schools
-    }) }}
+    {{
+        helpdeskQueueSubNavigation({
+            activePage: 'inbox',
+            schools: data.schools
+        }) 
+    }}
 
     {{ schoolSelectionList({
         type: 'inbox',

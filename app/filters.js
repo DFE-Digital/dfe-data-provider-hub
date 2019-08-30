@@ -460,8 +460,20 @@ module.exports = function(env) {
 		return generate.name()
 	}
 
+	filters.randomItem = arr => {
+		return generate.randomItemFrom(arr)
+	}
+
 	filters.phoneNumber = () => {
 		return generate.phoneNumber()
+	}
+
+	filters.replaceLA = (ESTAB, laNumber) => {
+		return laNumber + ESTAB.substr(3)
+	}
+
+	filters.getLA = ESTAB => {
+		return ESTAB.slice(0, -5)
 	}
 
 	filters.redirect = location => {

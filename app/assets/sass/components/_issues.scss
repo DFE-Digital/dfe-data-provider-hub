@@ -48,6 +48,28 @@
 	input[type='submit'],
 	a.govuk-button {
 		white-space: nowrap;
-		margin-bottom: 8px;
+		margin-bottom: 3px;
 	}
+}
+
+.query-icon {
+	display: inline-block;
+	box-sizing: border-box;
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 50%;
+	padding-top: 0.2em;
+	margin-right: 0.25em;
+}
+
+.govuk-table__cell.difference-highlight {
+	background-color: rgba(govuk-colour('light-blue'), 0.1);
+}
+
+.app-duplicate-pupil {
+	background-color: rgba(govuk-colour('light-blue'), 0.1);
 }
