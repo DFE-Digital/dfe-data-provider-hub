@@ -65,16 +65,19 @@
                                         html: 'Return status'
                                     },
                                     {
-                                        html: 'Last name'
+                                        html: 'First name'
                                     },
                                     {
                                         html: 'Middle name'
                                     },
                                     {
-                                        html: 'First name'
+                                        html: 'Last name'
                                     },
                                     {
                                         html: 'Date of birth'
+                                    },
+                                    {
+                                        html: 'Gender'
                                     }
                                 ],
                                 rows: [
@@ -89,16 +92,19 @@
                                             html: 'Authorised'
                                         },
                                         {
-                                            html: (data.demoPupils | reverse)[selectionIndex].surname
+                                            html: (data.demoPupils | reverse)[selectionIndex].firstname
                                         },
                                         {
                                             html: (middleName | initialLetter if isTopDifferent else middleName) if not isTopBlank
                                         },
                                         {
-                                            html: (data.demoPupils | reverse)[selectionIndex].firstname
+                                            html: (data.demoPupils | reverse)[selectionIndex].surname
                                         },
                                         {
                                             html: (data.demoPupils | reverse)[selectionIndex].dob | formatDoB
+                                        },
+                                        {
+                                            html: '-'
                                         }
                                     ],
                                     [
@@ -112,16 +118,19 @@
                                             html: 'In review'
                                         },
                                         {
-                                            html: (data.demoPupils | reverse)[selectionIndex].surname
+                                            html: (data.demoPupils | reverse)[selectionIndex].firstname
                                         },
                                         {
                                             html: (middleName | initialLetter if isBottomDifferent else middleName) if not isBottomBlank
                                         },
                                         {
-                                            html: (data.demoPupils | reverse)[selectionIndex].firstname
+                                            html: (data.demoPupils | reverse)[selectionIndex].surname
                                         },
                                         {
                                             html: (data.demoPupils | reverse)[selectionIndex].dob | formatDoB
+                                        },
+                                        {
+                                            html: '-'
                                         }
                                     ]
                                 ]
@@ -138,7 +147,7 @@
 
         {% set laDuplicateCount = 9 %}
 
-        <p><b>Found {{ laDuplicateCount }} records where the UPN matches other records within your LA</b></p>
+        <p><b>Found {{ laDuplicateCount }} records where the identifying fields match with records within your LA</b></p>
 
                 {% for pupil in data.demoPupils %}
                     {% set selectionIndex = loop.index - 1 %}
@@ -154,23 +163,7 @@
                                 {{ data.schools[altIndex].LAESTAB | replaceLA('423') }} - {{ data.schools[altIndex].name }}</p>
                             </div>
                             <div class="govuk-grid-column-one-third">
-                                <span class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> 
-                                {{ 
-                                    [
-                                        'This pupil cannot be solely registered at more than one school.',
-                                        'This pupil cannot be solely registered and have a main (dual registration).',
-                                        'This pupil cannot be solely registered and have a subsidiary (dual registration).',
-                                        'This pupil cannot have more than one main (dual registered) record.',
-                                        'This pupil would not normally have more than one subsidiary (dual registered) record.',
-                                        'This date of births for these pupils do not match',
-                                        'This pupil cannot have an enrolment status of ‘FE College’ and also be solely registered at another school.',
-                                        'This pupil cannot have an enrolment status of ‘Other Provider ’ and also be solely registered at another school.',
-                                        'This pupil cannot have an enrolment status of ‘FE College’ and also have a main registration at another school.',
-                                        'This pupil cannot have an enrolment status of ‘Other Provider’ and also have a main registration at another school.'
-                                    ] | randomItem 
-                                }}
-                                </span>
+                                
                             </div>
                         </div>
                         {% set isTopDifferent = 0.15 | probability %}
@@ -195,16 +188,19 @@
                                         html: 'Return status'
                                     },
                                     {
-                                        html: 'Last name'
+                                        html: 'First name'
                                     },
                                     {
                                         html: 'Middle name'
                                     },
                                     {
-                                        html: 'First name'
+                                        html: 'Last name'
                                     },
                                     {
                                         html: 'Date of birth'
+                                    },
+                                    {
+                                        html: 'Gender'
                                     }
                                 ],
                                 rows: [
@@ -219,16 +215,19 @@
                                             html: 'Authorised'
                                         },
                                         {
-                                            html: data.demoPupils[selectionIndex].surname
+                                            html: data.demoPupils[selectionIndex].firstname
                                         },
                                         {
                                             html: (middleName | initialLetter if isTopDifferent else middleName) if not isTopBlank
                                         },
                                         {
-                                            html: data.demoPupils[selectionIndex].firstname
+                                            html: data.demoPupils[selectionIndex].surname
                                         },
                                         {
                                             html: data.demoPupils[selectionIndex].dob | formatDoB
+                                        },
+                                        {
+                                            html: '-'
                                         }
                                     ],
                                     [
@@ -242,16 +241,19 @@
                                             html: 'In review'
                                         },
                                         {
-                                            html: data.demoPupils[selectionIndex].surname
+                                            html: data.demoPupils[selectionIndex].firstname
                                         },
                                         {
                                             html: (middleName | initialLetter if isBottomDifferent else middleName) if not isBottomBlank
                                         },
                                         {
-                                            html: data.demoPupils[selectionIndex].firstname
+                                            html: data.demoPupils[selectionIndex].surname
                                         },
                                         {
                                             html: data.demoPupils[selectionIndex].dob | formatDoB
+                                        },
+                                        {
+                                            html: '-'
                                         }
                                     ]
                                 ]
