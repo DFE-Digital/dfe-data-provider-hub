@@ -24,5 +24,6 @@ module.exports = {
 	schools: Generate.schools(1403),
 	user: Generate.name(),
 	la: Generate.randomItemFrom(require('./simulated-data/local-authorities')),
-	demoPupils: Generate.pupils(100)
+	las: require('./simulated-data/local-authorities'),
+	demoPupils: Generate.pupils(74)
 }

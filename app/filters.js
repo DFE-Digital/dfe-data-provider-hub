@@ -460,6 +460,10 @@ module.exports = function(env) {
 		return generate.name()
 	}
 
+	filters.randomMiddleName = () => {
+		return generate.firstName()
+	}
+
 	filters.randomItem = arr => {
 		return generate.randomItemFrom(arr)
 	}
@@ -470,6 +474,23 @@ module.exports = function(env) {
 
 	filters.replaceLA = (ESTAB, laNumber) => {
 		return laNumber + ESTAB.substr(3)
+	}
+
+	filters.stripLA = ESTAB => {
+		return ESTAB.substr(4)
+	}
+
+	filters.initialLetter = name => {
+		return name.charAt(0)
+	}
+
+	filters.laNameFromCode = LANo => {
+		if (parseInt(LANo)) {
+			const las = require('./data/simulated-data/local-authorities')
+			const foundLA = las.filter(la => parseInt(LANo) == la.code)
+			return foundLA[0].name
+		}
+		return 'Invalid LA Number'
 	}
 
 	filters.getLA = ESTAB => {
@@ -492,6 +513,10 @@ module.exports = function(env) {
 			return 'all-responded'
 		}
 		return 'in-progress'
+	}
+
+	filters.probability = float => {
+		return Math.random() < float
 	}
 
 	/* ------------------------------------------------------------------

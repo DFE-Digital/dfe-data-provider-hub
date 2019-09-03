@@ -166,7 +166,7 @@ module.exports = [
 		code: 945
 	},
 	{
-		name: 'Rutshire City City Council',
+		name: 'Rutshire City Council',
 		schoolCount: 75,
 		code: 153
 	},
@@ -516,7 +516,7 @@ module.exports = [
 		code: 131
 	},
 	{
-		name: 'Summerbrook City City Council',
+		name: 'Summerbrook City Council',
 		schoolCount: 68,
 		code: 248
 	},
